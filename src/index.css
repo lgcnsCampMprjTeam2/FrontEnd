@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+:root {
+
+}
+
+@theme{
+    --spacing: 1px;
+}
+
+body {
+  margin: 0;
+}
