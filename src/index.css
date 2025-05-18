@@ -1,11 +1,55 @@
 @import "tailwindcss";
 
-:root {
-
+/* Pretendard 웹폰트 적용 */
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 300;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/Pretendard-Light.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/Pretendard-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 500;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/Pretendard-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 600;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/Pretendard-SemiBold.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 700;
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/Pretendard-Bold.woff2') format('woff2');
+  font-display: swap;
 }
 
-@theme{
-    --spacing: 1px;
+
+
+
+:root {
+  font-family: 'Pretendard';
+}
+
+@theme {
+  --spacing: 1px;
+
+  --color-primary: #1D4ED6;
+  --color-secondary: #C6E3FE;
+  --color-gray-100: #EBEDF3;
+  --color-gray-300: #D2D5DB;
+  --color-gray-500: #9A9CA1;
+  --color-gray-700: #646568;
+  --color-black: #2F2F31;
+
 }
 
 body {
