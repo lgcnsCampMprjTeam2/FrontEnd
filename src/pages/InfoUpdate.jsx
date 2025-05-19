@@ -1,13 +1,22 @@
 import React from "react";
 import '../styles/style.css';
 import BigButton from "../components/global/BigButton";
+import { useNavigate } from "react-router-dom"; // 추가
 
 function InfoUpdate() {
+
+  // 수정 완료 버튼 작동 추가
+  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/user/info");
+  };
+
+
   return (
     <div className="bg-white min-h-screen flex items-center justify-center">
       <form
-        action="#" //action="api/user-info-update" 
-        method="POST"
+        onSubmit={handleSubmit} // ← 폼 제출 이벤트 핸들러 등록 추가
         className="w-full max-w-md bg-gray-100 py-50 px-20 rounded shadow flex flex-col items-center"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">회원 정보 수정</h2>
@@ -60,7 +69,7 @@ function InfoUpdate() {
         />
 
         <div className="text-center mt-40">
-        <BigButton text="수정완료" fill />
+          <BigButton text="수정완료" fill />
         </div>
       </form>
     </div>
