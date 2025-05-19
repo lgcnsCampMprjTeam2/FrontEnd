@@ -6,6 +6,8 @@ import Nav from "./components/global/Nav";
 import InfoUpdate from "./pages/InfoUpdate";
 import QuestionBoard from './pages/QuestionBoard';
 import QuestionDetail from './pages/QuestionDetail';
+import QuestionPostPage from "./pages/QuestionPostPage";
+import AnswerResultPage from "./pages/AnswerResultPage";
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
           <Route path="/user/update" element={<InfoUpdate />} />
           <Route path="/comm" element={<QuestionBoard />} />
           <Route path="/comm/all" element={<QuestionDetail />} />
+          <Route path="/comm/post" element={<QuestionPostPage />} />
+          <Route path="/answer" element={<AnswerResultPage />} />
         </Routes>
       </BrowserRouter>
     </>
