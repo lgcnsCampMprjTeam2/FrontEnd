@@ -9,6 +9,7 @@ import QuestionDetail from './pages/QuestionDetail';
 import CSQuestionBoard from "./pages/CSQuestionBoard";
 import QuestionPostPage from "./pages/QuestionPostPage";
 import AnswerResultPage from "./pages/AnswerResultPage";
+import CSAnswerPostPage from "./pages/CSAnswerPostPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/comm" element={<QuestionBoard />} />
           <Route path="/comm/all" element={<QuestionDetail />} />
           <Route path="/questions" element={<CSQuestionBoard />} />
+          <Route path="/answers" element={<CSAnswerPostPage />} />
           <Route path="/comm/post" element={<QuestionPostPage />} />
           <Route path="/answer" element={<AnswerResultPage />} />
         </Routes>
