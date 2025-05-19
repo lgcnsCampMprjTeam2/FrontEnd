@@ -37,11 +37,11 @@
 
 :root {
   font-family: 'Pretendard';
+  color:var(--color-black);
 }
 
 @theme {
   --spacing: 1px;
-
   --color-primary: #1D4ED6;
   --color-secondary: #C6E3FE;
   --color-gray-100: #EBEDF3;
