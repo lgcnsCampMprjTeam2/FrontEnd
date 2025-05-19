@@ -1,14 +1,16 @@
 import React from 'react'
 
-const CSQuestionTable = () => {
-    const questions = [
-        {id:1,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-13 12:00:00"},
-        {id:2,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-14 12:00:00"},
-        {id:3,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-15 12:00:00"},
-        {id:4,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-16 12:00:00"},
-        {id:5,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-17 12:00:00"},
-    ];
-
+const CSQuestionTable = ({questions}) => {
+    // const questions = [
+    //     {id:1,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-13 12:00:00"},
+    //     {id:2,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-14 12:00:00"},
+    //     {id:3,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-15 12:00:00"},
+    //     {id:4,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-16 12:00:00"},
+    //     {id:5,category:"운영체제", content:"프로세스에 대해 설명하세요.", createdAt:"2024-05-17 12:00:00"},
+    // ];
+    if(!questions){
+        return null;
+    }
     const thStyle = 'font-medium py-10';
   return (
     <div>
