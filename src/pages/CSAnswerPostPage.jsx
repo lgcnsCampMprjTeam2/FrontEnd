@@ -3,6 +3,7 @@ import CSAnswerEditor from "../components/cs/CSAnswerEditor";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import BigButton from "../components/global/BigButton";
 
 
 function AnswerTab({ to, label, active = false }) {
@@ -51,6 +52,12 @@ const CSAnswerPostPage = () => {
 
       {/* 작성 */}
       <CSAnswerEditor content={content} setContent={setContent} />
+
+      <div className="flex justify-end py-24">
+
+      <BigButton text="제출" fill/>
+      </div>
+
     </div>
   );
 };
