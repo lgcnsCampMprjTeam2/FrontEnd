@@ -6,6 +6,7 @@ import Nav from "./components/global/Nav";
 import InfoUpdate from "./pages/InfoUpdate";
 import QuestionBoard from './pages/QuestionBoard';
 import QuestionDetail from './pages/QuestionDetail';
+import CSQuestionBoard from "./pages/CSQuestionBoard";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/user/update" element={<InfoUpdate />} />
           <Route path="/comm" element={<QuestionBoard />} />
           <Route path="/comm/all" element={<QuestionDetail />} />
+          <Route path="/questions" element={<CSQuestionBoard />} />
         </Routes>
       </BrowserRouter>
     </>
