@@ -1247,7 +1247,7 @@ function QuestionBoard() {
               <div className="col-span-3">
                 {/* <Link to={`/question/${problem.number}`} className="hover:underline"> 
                         임시로 QuestionDetail 페이지로 이동 */}
-                <Link to={`/QuestionDetail`} className="hover:underline">
+                <Link to={`./all`} className="hover:underline">
                   {problem.title}
                 </Link>
               </div>
