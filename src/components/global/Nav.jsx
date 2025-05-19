@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import BigButton from "./BigButton";
+import logo from './logo.png';
 
 const Nav = () => {
   return (
@@ -19,7 +20,7 @@ const Nav = () => {
       </ul>
 
       <Link className="flex justify-center" to="/">
-        로고
+      <img src={logo}/>
       </Link>
 
       <div className="flex gap-20 justify-end">
