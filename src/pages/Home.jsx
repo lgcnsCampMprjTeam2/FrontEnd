@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Window from "../components/home/Window";
 
 const Home = () => {
+  
   return (
     <div className="flex flex-col justify-center">
       {/* gradient */}
@@ -12,7 +13,7 @@ const Home = () => {
         <Window />
 
         <div className="flex justify-center">
-          <Link className="items-center px-50 py-16 text-lg rounded-[10px] text-white bg-primary" to="answers/post">
+          <Link className="items-center px-50 py-16 text-lg rounded-[10px] text-white bg-primary" to={`answers/post`}>
             답변 작성하기
           </Link>
         </div>
