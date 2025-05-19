@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Pagination from "../components/global/Pagination";
 
 const itemsPerPage = 10;
 const pageGroupSize = 10;
@@ -1224,9 +1225,9 @@ function QuestionBoard() {
       </form>
 
       <div className="grid grid-cols-12 gap-4 border-b border-gray-300 pb-2 text-black font-semibold select-none bg-[#C6E3FE]">
-        <div className="col-span-2 text-center">주제</div>
+        <div className="col-span-1 text-center whitespace-nowrap">번호</div>
         <div className="col-span-3 text-center">글 제목</div>
-        <div className="col-span-1 text-center whitespace-nowrap">문제번호</div>
+        <div className="col-span-2 text-center">주제</div>
         <div className="col-span-2 text-center">작성자</div>
         <div className="col-span-1 text-center">댓글 수</div>
         <div className="col-span-1 text-center">추천 수</div>
@@ -1243,15 +1244,13 @@ function QuestionBoard() {
               key={problem.number}
               className="grid grid-cols-12 gap-4 py-3 hover:bg-gray-50 cursor-pointer"
             >
-              <div className="col-span-2 text-center text-gray-700">{problem.category}</div>
-              <div className="col-span-3">
-                {/* <Link to={`/question/${problem.number}`} className="hover:underline"> 
-                        임시로 QuestionDetail 페이지로 이동 */}
-                <Link to={`./all`} className="hover:underline">
+              <div className="col-span-1 text-center text-gray-700 whitespace-nowrap">{problem.number}</div>
+              <div className="col-span-3 text-center">
+                <Link to={`./${problem.number}`} className="hover:underline">
                   {problem.title}
                 </Link>
               </div>
-              <div className="col-span-1 text-center text-gray-700 whitespace-nowrap">{problem.number}</div>
+              <div className="col-span-2 text-center text-gray-700">{problem.category}</div>
               <div className="col-span-2 text-center text-gray-700">{problem.author}</div>
               <div className="col-span-1 text-center text-gray-500">{problem.comments}</div>
               <div className="col-span-1 text-center text-gray-500">{problem.likes}</div>
@@ -1260,50 +1259,19 @@ function QuestionBoard() {
           ))
         )}
       </ul>
-
-      {/* 페이지네이션 */}
-      <div className="flex justify-center mt-6">
-        <nav className="inline-flex items-center space-x-1">
-          <button
-            disabled={currentPageGroup === 0}
-            onClick={() => {
-              if (currentPageGroup > 0) {
-                setCurrentPageGroup(currentPageGroup - 1);
-                setCurrentPage((currentPageGroup - 1) * pageGroupSize + 1);
-              }
-            }}
-            className="px-3 py-1 mx-1 rounded bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-          >
-            Prev
-          </button>
-
-          {Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => groupStart + i).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`page-btn px-3 py-1 mx-1 rounded ${page === currentPage
-                ? "bg-blue-600 text-white"
-                : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-            >
-              {page}
-            </button>
-          ))}
-
-          <button
-            disabled={currentPageGroup === totalPageGroups - 1 || totalPages === 0}
-            onClick={() => {
-              if (currentPageGroup < totalPageGroups - 1) {
-                setCurrentPageGroup(currentPageGroup + 1);
-                setCurrentPage((currentPageGroup + 1) * pageGroupSize + 1);
-              }
-            }}
-            className="px-3 py-1 mx-1 rounded bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </nav>
+      <div className="flex justify-end mt-5 mr-40">
+        <Link to="./post"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-30 py-1 rounded"
+        >글쓰기
+        </Link>
       </div>
+      {/* 페이지네이션 */}
+      <Pagination
+        totalPages={totalPages}
+        page={currentPage}
+        setPage={setCurrentPage}
+        category={category}
+      />
     </main>
   );
 }

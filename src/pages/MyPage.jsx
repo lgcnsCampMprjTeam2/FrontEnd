@@ -43,14 +43,14 @@ function MyPage() {
       </table>
 
       <div className="max-w-[600px] mx-auto mt-6 text-center">
-        <a href="./update"  // href 주소 변경
+        <a href="./update"
           className="inline-block px-6 py-2 border border-black bg-white text-black font-medium rounded"
         > 정보 수정
         </a>
       </div>
 
       <div className="max-w-[600px] mx-auto mt-6 text-center">
-        <a href="/회원탈퇴"
+        <a href="./delete"
           className="inline-block px-6 py-2 border border-black bg-white text-black font-medium rounded"
         > 회원 탈퇴
         </a>
