@@ -12,7 +12,7 @@ const Home = () => {
         <Window />
 
         <div className="flex justify-center">
-          <Link className="items-center px-50 py-16 text-lg rounded-[10px] text-white bg-primary" to="answers">
+          <Link className="items-center px-50 py-16 text-lg rounded-[10px] text-white bg-primary" to="answers/post">
             답변 작성하기
           </Link>
         </div>
