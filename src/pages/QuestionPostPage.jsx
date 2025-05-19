@@ -75,7 +75,6 @@ function QuestionPostPage() {
         <div className="mt-10">
           <CKEditor
             editor={ClassicEditor}
-            data="<p>질문 작성</p>"
             onChange={(event, editor) => setContent(editor.getData())}
           />
         </div>
