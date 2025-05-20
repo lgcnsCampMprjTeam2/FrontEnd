@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CSQuestionTable from "../components/cs/CSQuestionTable";
 import Pagination from "../components/global/Pagination";
-import axios from "axios";
 import Category from "../components/global/Category";
+import { fetchQuestions } from "../api/CSQuestionApi";
 
 const CSQuestionBoard = () => {
   const [questions, setQuestions] = useState([]);
@@ -13,22 +13,6 @@ const CSQuestionBoard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const fetchQuestions = async (page, category) => {
-    try {
-      const res = await axios.get("/api/questions", {
-        params: {
-          page: page,
-          category: category || undefined,
-        },
-      });
-
-      const data = res.data;
-      setQuestions(data.result.content);
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -38,7 +22,12 @@ const CSQuestionBoard = () => {
     setPage(pageParam);
     setCategory(categoryParam);
 
-    fetchQuestions(pageParam, categoryParam);
+    fetchQuestions(pageParam, categoryParam)
+      .then((data) => {
+        setQuestions(data.content);
+        setTotalPages(data.totalPages);
+      })
+      .catch((e) => console.log(e));
   }, [location.search]);
 
   const handleSelectCategory = (e) => {

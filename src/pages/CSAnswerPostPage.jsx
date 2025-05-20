@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import CSAnswerEditor from "../components/cs/CSAnswerEditor";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import BigButton from "../components/global/BigButton";
-
+import { fetchQuestionById } from "../api/CSQuestionApi";
 
 function AnswerTab({ to, label, active = false }) {
   return (
     <Link
       to={to}
       className={`inline-block px-8 py-12 min-w-[80px] text-center
-                  ${active
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-500 hover:text-blue-600"}`}
+                  ${
+                    active
+                      ? "text-blue-600 border-b-2 border-blue-600"
+                      : "text-gray-500 hover:text-blue-600"
+                  }`}
     >
       {label}
     </Link>
@@ -24,26 +26,49 @@ const CSAnswerPostPage = () => {
   const [content, setContent] = useState("");
   const [question, setQuestion] = useState();
   const { questionId } = useParams();
+  const navigate = useNavigate();
 
-  const fetchQuestion = async () => {
+  const postAnswer = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token == null) {
+      navigate("/");
+      return;
+    }
     try {
-      const res = await axios.get(`/api/questions/${questionId}`);
+      const res = await axios.post(
+        "/api/answers",
+        {
+          csquestion_id: questionId,
+          csanswer_content: content,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      setQuestion(res.data.result);
+      console.log("답변 등록 성공", res.data);
+      navigate(`/answer`);
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    fetchQuestion();
+    fetchQuestionById(questionId).then((data) => setQuestion(data));
   }, []);
 
   return (
     <div className="px-120">
       {/* tab */}
       <nav className="mt-24">
-        <AnswerTab to={`/answers/post/${questionId}`} label={`${questionId}번`} active />
+        <AnswerTab
+          to={`/answers/post/${questionId}`}
+          label={`${questionId}번`}
+          active
+        />
         <AnswerTab to="#" label="내 답변" />
       </nav>
 
@@ -54,10 +79,8 @@ const CSAnswerPostPage = () => {
       <CSAnswerEditor content={content} setContent={setContent} />
 
       <div className="flex justify-end py-24">
-
-      <BigButton text="제출" fill/>
+        <BigButton text="제출" fill onClick={postAnswer} />
       </div>
-
     </div>
   );
 };
