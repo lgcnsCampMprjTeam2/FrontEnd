@@ -23,7 +23,7 @@ const Home = () => {
 
         <div className="flex justify-center">
           {todayQuestion && 
-          <Link className="items-center px-50 py-16 text-lg rounded-[10px] text-white bg-primary" to={`answers/post/${todayQuestion.id}`}>
+          <Link className="items-center px-50 py-16 text-lg rounded-[10px] text-white bg-primary" to={`/questions/detail/${todayQuestion.id}`}>
             답변 작성하기
           </Link>
           }
@@ -36,6 +36,7 @@ const Home = () => {
 
       {/* CS 면접 질문 리스트 */}
       <div className="px-120">
+        <p className="text-black text-xl font-semibold pb-24">CS 면접 질문 리스트</p>
         <CSQuestionTable questions={questions} />
       </div>
     </div>
