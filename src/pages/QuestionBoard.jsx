@@ -65,18 +65,18 @@ function QuestionBoard() {
   };
 
   return (
-    <main className="px-6 py-10 max-w-6xl mx-auto bg-white min-h-screen">
+    <main className="px-120 max-w-6xl bg-white min-h-screen">
       <form onSubmit={handleSearchSubmit} className="mb-6 flex justify-between items-center">
-        <div>
-          <label htmlFor="topic" className="mr-2 font-semibold text-gray-700">
-            주제:
+        <div className="flex items-center gap-12 my-24">
+          <label htmlFor="topics">
+            카테고리
           </label>
           <Category value={category} onChange={(e) => handleCategoryChange(e)} />
         </div>
 
-        <div className="flex items-center space-x-2">
-          <label htmlFor="search" className="font-semibold text-gray-700">
-            제목 검색:
+        <div className="flex items-center gap-12">
+          <label htmlFor="search">
+            제목 검색
           </label>
           <input
             id="search"
