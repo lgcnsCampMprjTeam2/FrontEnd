@@ -9,8 +9,8 @@ import QuestionDetail from './pages/QuestionDetail';
 import CSQuestionBoard from "./pages/CSQuestionBoard";
 import QuestionPostPage from "./pages/QuestionPostPage";
 import AnswerResultPage from "./pages/AnswerResultPage";
-import CSAnswerPostPage from "./pages/CSAnswerPostPage";
-
+import Delete from './pages/Delete';
+import MyAnswersPage from "./pages/MyAnswersPage";
 
 function App() {
   return (
@@ -21,12 +21,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/user/info" element={<MyPage />} />
           <Route path="/user/update" element={<InfoUpdate />} />
+          <Route path="/user/delete" element={<Delete />} />
           <Route path="/comm" element={<QuestionBoard />} />
-          <Route path="/comm/all" element={<QuestionDetail />} />
+          <Route path="/comm/:number" element={<QuestionDetail />} />
           <Route path="/questions" element={<CSQuestionBoard />} />
-          <Route path="/answers/post/:questionId" element={<CSAnswerPostPage />} />
           <Route path="/comm/post" element={<QuestionPostPage />} />
           <Route path="/answer" element={<AnswerResultPage />} />
+          <Route path="/myAnswers" element={<MyAnswersPage />} />
+          
         </Routes>
       </BrowserRouter>
     </>

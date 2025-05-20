@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 const Pagination = ({ totalPages, page, setPage, category }) => {
   const navigate = useNavigate();
   const startPage = Math.floor((page - 1) / 10) * 10 + 1;
-  // const endPage = Math.min(startPage + 9, totalPages);
-  const endPage = startPage + 9;
+  const endPage = Math.min(startPage + 9, totalPages);
+  // const endPage = startPage + 9;
 
   const pages = [];
   for (let i = startPage; i <= endPage; i++) {
@@ -14,20 +14,20 @@ const Pagination = ({ totalPages, page, setPage, category }) => {
 
   const handleClickPage = (pageNum) => {
     setPage(pageNum);
-    navigate(`/questions?page=${pageNum}&category=${category}`);
+    navigate(`?page=${pageNum}&category=${category}`);
   };
 
   const handleNext = () => {
     if (endPage < totalPages) {
       setPage(endPage + 1);
-      navigate(`/questions?page=${endPage + 1}&category=${category}`);
+      navigate(`?page=${endPage + 1}&category=${category}`);
     }
   };
 
   const handlePrev = () => {
     if (startPage > 1) {
       setPage(startPage - 1);
-      navigate(`/questions?page=${startPage - 1}&category=${category}`);
+      navigate(`?page=${startPage - 1}&category=${category}`);
     }
   };
 
