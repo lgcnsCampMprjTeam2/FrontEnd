@@ -1,22 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import '../styles/style.css';
 import BigButton from "../components/global/BigButton";
-import { useNavigate } from "react-router-dom"; // 추가
+import { useNavigate } from "react-router-dom";
 
 function InfoUpdate() {
-
-  // 수정 완료 버튼 작동 추가
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/user/info");
+
+  // userInfo 상태 생성 (초기값은 빈 객체)
+  const [userInfo, setUserInfo] = useState({});
+
+  // 컴포넌트 마운트 시 public/UserInfoData.json 파일 fetch
+  useEffect(() => {
+    fetch('/UserInfoData.json')
+      .then(res => res.json())
+      .then(data => setUserInfo(data))
+      .catch(err => console.error('유저 정보 로드 실패:', err));
+  }, []);
+
+  // 수정 완료 버튼 클릭 시 유저정보 post 후 유저 정보 페이지로 이동동
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = {
+    name: e.target.name.value,
+    birthDate: e.target.birth.value,
+    email: e.target.email.value,
+    nickname: e.target.nickname.value,
   };
+
+  try {
+    const response = await fetch('/api/user/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error('업데이트 실패');
+    }
+
+    const result = await response.json();
+    alert(result.message);
+
+    navigate("/user/info");
+
+  } catch (error) {
+    alert('회원 정보 수정에 실패했습니다.');
+  }
+};
 
 
   return (
     <div className="bg-white min-h-screen flex items-center justify-center">
       <form
-        onSubmit={handleSubmit} // ← 폼 제출 이벤트 핸들러 등록 추가
+        onSubmit={handleSubmit}
         className="w-full max-w-md bg-gray-100 py-50 px-20 rounded shadow flex flex-col items-center"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">회원 정보 수정</h2>
@@ -28,7 +67,7 @@ function InfoUpdate() {
           type="text"
           id="name"
           name="name"
-          defaultValue="이름"
+          defaultValue={userInfo.name || ""}
           required
           className="w-full p-2 mb-4 border border-gray-300 rounded bg-white"
         />
@@ -40,7 +79,7 @@ function InfoUpdate() {
           type="text"
           id="birth"
           name="birth"
-          defaultValue="2005-05-18"
+          defaultValue={userInfo.birthDate || ""}
           className="w-full p-2 mb-4 border border-gray-300 rounded bg-white"
         />
 
@@ -51,7 +90,7 @@ function InfoUpdate() {
           type="email"
           id="email"
           name="email"
-          defaultValue="email@google.com"
+          defaultValue={userInfo.email || ""}
           required
           className="w-full p-2 mb-4 border border-gray-300 rounded bg-white"
         />
@@ -63,7 +102,7 @@ function InfoUpdate() {
           type="text"
           id="nickname"
           name="nickname"
-          defaultValue="MiniProject"
+          defaultValue={userInfo.nickname || ""}
           required
           className="w-full p-2 mb-6 border border-gray-300 rounded bg-white"
         />
