@@ -2,6 +2,13 @@
 
 @theme {
   --spacing: 1px;
+  --color-primary: #1D4ED6;
+  --color-secondary: #C6E3FE;
+  --color-gray-100: #EBEDF3;
+  --color-gray-300: #D2D5DB;
+  --color-gray-500: #9A9CA1;
+  --color-gray-700: #646568;
+  --color-black: #2F2F31;
 
 }
 
