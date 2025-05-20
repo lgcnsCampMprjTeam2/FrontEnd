@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import BigButton from "../components/global/BigButton";
+import { fetchQuestionById } from "../api/CSQuestionApi";
 
 function AnswerTab({ to, label, active = false }) {
   return (
@@ -26,16 +27,6 @@ const CSAnswerPostPage = () => {
   const [question, setQuestion] = useState();
   const { questionId } = useParams();
   const navigate = useNavigate();
-
-  const fetchQuestion = async () => {
-    try {
-      const res = await axios.get(`/api/questions/${questionId}`);
-
-      setQuestion(res.data.result);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const postAnswer = async () => {
     const token = localStorage.getItem("accessToken");
@@ -66,7 +57,7 @@ const CSAnswerPostPage = () => {
   };
 
   useEffect(() => {
-    fetchQuestion();
+    fetchQuestionById(questionId).then((data) => setQuestion(data));
   }, []);
 
   return (

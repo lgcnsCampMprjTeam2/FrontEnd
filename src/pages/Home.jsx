@@ -3,23 +3,16 @@ import Nav from "../components/global/Nav";
 import BigButton from "../components/global/BigButton";
 import { Link } from "react-router-dom";
 import Window from "../components/home/Window";
-import axios from "axios";
+import { fetchQuestions, fetchTodayQuestion } from "../api/CSQuestionApi";
+import CSQuestionTable from "../components/cs/CSQuestionTable";
 
 const Home = () => {
   const [todayQuestion, setTodayQuestion] = useState();
-  
-  const fetchTodayQuestion = async()=>{
-    try{
-      const res = await axios.get('/api/questions/today');
-      console.log(res.data);
-      setTodayQuestion(res.data.result);
-    }catch(e){
-      console.log(e);
-    }
-  }
+  const [questions, setQuestions] = useState([]);
 
   useEffect(()=>{
-    fetchTodayQuestion();
+    fetchTodayQuestion().then((data)=>setTodayQuestion(data));
+    fetchQuestions(1).then((data)=>setQuestions(data.content));
   },[]);
   
   return (
@@ -42,7 +35,9 @@ const Home = () => {
       </p>
 
       {/* CS 면접 질문 리스트 */}
-      <div></div>
+      <div className="px-120">
+        <CSQuestionTable questions={questions} />
+      </div>
     </div>
   );
 };
