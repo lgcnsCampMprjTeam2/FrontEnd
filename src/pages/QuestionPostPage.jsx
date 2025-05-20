@@ -5,6 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import Category from '../components/global/Category';   
 import '../App.css';
+import BigButton from '../components/global/BigButton';
 
 function QuestionPostPage() {
   const [title, setTitle] = useState('');
@@ -31,26 +32,30 @@ function QuestionPostPage() {
     }
   };
 
+  const inputStyle = "p-8 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:outline-none";
+
   return (
     <>
-      <section className="mx-auto max-w-5xl pt-14 pb-24 px-6">
+      <section className="mx-auto max-w-5xl py-24">
         {/* 입력 필드 */}
-        <div className="grid grid-cols-[120px_1fr] gap-y-8 gap-x-8">
+        <div className="grid grid-cols-[120px_1fr] gap-y-8 gap-x-8 mb-36">
           {/* ── 제목 ─────────────────────────────── */}
           <label className="self-center text-base font-medium">제목</label>
           <input
             type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="제목"
-            className="h-30 w-full text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className={inputStyle}
           />
 
           {/* ── 카테고리 (공통 컴포넌트) ─────────── */}
-          <label className="self-center text-base font-medium mr-2">카테고리</label>
+          <label className="self-center text-base font-medium mr-2">
+            카테고리
+          </label>
           <Category
             value={category}
-            onChange={e => setCategory(e.target.value)}
+            onChange={(e) => setCategory(e.target.value)}
           />
 
           {/* ── 문제번호 ─────────────────────────── */}
@@ -58,9 +63,9 @@ function QuestionPostPage() {
           <input
             type="text"
             value={problemNumber}
-            onChange={e => setProblemNumber(e.target.value)}
+            onChange={(e) => setProblemNumber(e.target.value)}
             placeholder="문제번호"
-            className="h-30 w-150 text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className={inputStyle}
           />
         </div>
 
@@ -74,12 +79,7 @@ function QuestionPostPage() {
 
         {/* ── 제출 버튼 ─────────────────────────── */}
         <div className="flex justify-end mt-8">
-          <button
-            onClick={handleSubmit}
-            className="h-30 px-12 bg-blue-600 text-lg text-white rounded-md hover:bg-blue-700"
-          >
-            제출
-          </button>
+          <BigButton text="제출" fill onClick={handleSubmit}/>
         </div>
       </section>
     </>
