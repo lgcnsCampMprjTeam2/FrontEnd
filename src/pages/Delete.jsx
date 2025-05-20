@@ -6,9 +6,9 @@ const Delete = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch('/delete', {
+      const response = await fetch('/api/user/delete', {
         method: 'POST',
-        credentials: 'include', // 세션 쿠키 포함
+        credentials: 'include',
       });
 
       if (response.ok) {
