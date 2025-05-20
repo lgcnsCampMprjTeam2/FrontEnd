@@ -45,7 +45,6 @@ function SignInForm() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // 타입 표기를 제거했습니다.
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
@@ -89,7 +88,6 @@ function SignUpForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // 여기도 타입 표기 없이 e만 사용합니다.
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
