@@ -2,33 +2,7 @@
   border-radius: 0.375rem;
 }
 
-.color-primary {
-  color: #1D4ED6;
-}
 
-.color-secondary {
-  color: #C6E3FE;
-}
-
-.bg-blue-600 {
-  background-color: #1D4ED6;
-}
-
-.text-white {
-  color: #fff;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.bg-white {
-  background-color: #fff;
-}
-
-.text-gray-700 {
-  color: #646568;
-}
 
 .hover\:bg-gray-100:hover {
   background-color: #EBEDF3;
