@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../components/global/Pagination";
+import Category from "../components/global/Category";
 
 const itemsPerPage = 10;
 const pageGroupSize = 10;
@@ -9,7 +10,7 @@ function QuestionBoard() {
   const [questions, setQuestions] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState("전체");
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageGroup, setCurrentPageGroup] = useState(0);
 
@@ -28,7 +29,7 @@ function QuestionBoard() {
   }, []);
 
   const filtered = questions.filter((q) => {
-    const matchesCategory = category === "all" || q.category === category;
+    const matchesCategory = category === "전체" || q.category === category;
     const matchesSearch = q.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   }).sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -70,14 +71,7 @@ function QuestionBoard() {
           <label htmlFor="topic" className="mr-2 font-semibold text-gray-700">
             주제:
           </label>
-          <select id="topic" value={category} onChange={handleCategoryChange} className="border px-4 py-2 rounded shadow-sm text-gray-700">
-            <option value="all">전체</option>
-            <option value="네트워크">네트워크</option>
-            <option value="데이터베이스">데이터베이스</option>
-            <option value="운영체제">운영체제</option>
-            <option value="자료구조">자료구조</option>
-            <option value="알고리즘">알고리즘</option>
-          </select>
+          <Category value={category} onChange={(e) => handleCategoryChange(e)} />
         </div>
 
         <div className="flex items-center space-x-2">
