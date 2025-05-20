@@ -1132,5 +1132,23 @@
     "comments": 11,
     "likes": 24,
     "date": "2025-01-11"
+  },
+  {
+    "category": "알고리즘",
+    "title": "알고리즘이란",
+    "number": 127,
+    "author": "유저1",
+    "comments": 101,
+    "likes": 240,
+    "date": "2025-01-11"
+  },
+  {
+    "category": "소프트웨어 공학",
+    "title": "소프트웨어란",
+    "number": 128,
+    "author": "유저2",
+    "comments": 523,
+    "likes": 232,
+    "date": "2025-01-11"
   }
 ]
