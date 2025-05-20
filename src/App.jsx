@@ -12,6 +12,7 @@ import AnswerResultPage from "./pages/AnswerResultPage";
 import Delete from './pages/Delete';
 import MyAnswersPage from "./pages/MyAnswersPage";
 import CSAnswerPostPage from "./pages/CSAnswerPostPage";
+import Auth from "./pages/Auth";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/comm/post" element={<QuestionPostPage />} />
           <Route path="/answer" element={<AnswerResultPage />} />
           <Route path="/myAnswers" element={<MyAnswersPage />} />
+          <Route path="/auth" element={<Auth />} />
           
         </Routes>
       </BrowserRouter>

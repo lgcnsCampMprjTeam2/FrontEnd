@@ -20,12 +20,16 @@ const Nav = () => {
       </ul>
 
       <Link className="flex justify-center" to="/">
-      <img src={logo}/>
+        <img src={logo} />
       </Link>
 
       <div className="flex gap-20 justify-end">
-        <BigButton text="회원가입" />
-        <BigButton text="로그인" fill />
+        <Link to="/auth?tab=signup">
+          <BigButton text="회원가입" />
+        </Link>
+        <Link to="/auth?tab=signin">
+          <BigButton text="로그인" fill />
+        </Link>
       </div>
     </div>
   );
