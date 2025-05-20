@@ -102,7 +102,7 @@ const QuestionDetail = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-6">
+    <div className="bg-white p-6">
       {!questionInfo ? (
         <p className="text-center text-gray-500">질문 정보를 불러올 수 없습니다.</p>
       ) : (
@@ -111,18 +111,18 @@ const QuestionDetail = () => {
           <table className="question-table border w-full text-sm mb-6">
             <tbody>
               <tr className="border-b">
-                <td className="p-2 font-semibold">제목</td>
-                <td className="p-2" colSpan="3">{questionInfo[number].title}</td>
-                <td className="p-2 font-semibold">작성자</td>
-                <td className="p-2">{questionInfo[number].author}</td>
+                <td className="font-semibold">제목</td>
+                <td colSpan="3">{questionInfo[number].title}</td>
+                <td className="font-semibold">작성자</td>
+                <td>{questionInfo[number].author}</td>
               </tr>
               <tr className="border-b">
-                <td className="p-2 font-semibold">주제</td>
-                <td className="p-2">{questionInfo[number].subject}</td>
-                <td className="p-2 font-semibold">문제 번호</td>
-                <td className="p-2">{questionInfo[number].problemNumber}</td>
-                <td className="p-2 font-semibold">작성일</td>
-                <td className="p-2">{questionInfo[number].date}</td>
+                <td className="font-semibold">주제</td>
+                <td>{questionInfo[number].subject}</td>
+                <td className=" ont-semibold">문제 번호</td>
+                <td>{questionInfo[number].problemNumber}</td>
+                <td className="font-semibold">작성일</td>
+                <td>{questionInfo[number].date}</td>
               </tr>
             </tbody>
           </table>
@@ -149,11 +149,11 @@ const QuestionDetail = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="댓글을 입력하세요"
-          className="border p-2 w-full rounded-l-md"
+          className="border p-2 w-full rounded-l-md focus:outline-none"
         />
         <button
           onClick={handleCommentSubmit}
-          className="bg-blue-600 text-white px-4 py-1 rounded-r-md hover:bg-blue-700"
+          className="bg-primary text-white rounded-r-md"
         >작성
         </button>
       </div>

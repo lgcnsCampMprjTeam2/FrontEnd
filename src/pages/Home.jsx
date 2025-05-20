@@ -35,8 +35,8 @@ const Home = () => {
       </p>
 
       {/* CS 면접 질문 리스트 */}
-      <div className="px-120">
-        <p className="text-xl font-semibold pb-24">CS 면접 질문 리스트</p>
+      <div className="px-120 mb-120 flex flex-col gap-24">
+        <Link className="text-xl font-semibold" to='/questions'>CS 면접 질문 리스트</Link>
         <CSQuestionTable questions={questions} />
       </div>
     </div>

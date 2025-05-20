@@ -5,7 +5,7 @@ const CSQuestionTable = ({ questions }) => {
   if (!questions) {
     return null;
   }
-  const thStyle = "font-medium py-10";
+  const thStyle = "font-medium py-10 text-black";
 
   return (
     <div>
