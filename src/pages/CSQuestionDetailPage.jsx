@@ -22,7 +22,7 @@ function AnswerTab({ to, label, active = false }) {
   );
 }
 
-const CSAnswerPostPage = () => {
+const CSQuestionDetailPage = () => {
   const [content, setContent] = useState("");
   const [question, setQuestion] = useState();
   const { questionId } = useParams();
@@ -65,7 +65,7 @@ const CSAnswerPostPage = () => {
       {/* tab */}
       <nav className="mt-24">
         <AnswerTab
-          to={`/answers/post/${questionId}`}
+          to={`/questions/detail/${questionId}`}
           label={`${questionId}번`}
           active
         />
@@ -73,16 +73,16 @@ const CSAnswerPostPage = () => {
       </nav>
 
       {/* 문제 */}
-      {question && <p className="text-2xl py-36">{question.content}</p>}
+      {question && <p className="text-2xl py-36 border-b-1 border-gray-300 mb-36">{question.content}</p>}
 
-      {/* 작성 */}
-      <CSAnswerEditor content={content} setContent={setContent} />
+        {/* 작성 */}
+        <CSAnswerEditor content={content} setContent={setContent} />
 
-      <div className="flex justify-end py-24">
-        <BigButton text="제출" fill onClick={postAnswer} />
-      </div>
+        <div className="flex justify-end py-24">
+          <BigButton text="제출" fill onClick={postAnswer} />
+        </div>
     </div>
   );
 };
 
-export default CSAnswerPostPage;
+export default CSQuestionDetailPage;
