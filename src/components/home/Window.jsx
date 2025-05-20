@@ -1,17 +1,21 @@
-import React from 'react'
-import search from "../../assets/search.svg"
+import React from "react";
+import search from "../../assets/search.svg";
 
-const Circle = ({color}) =>{
-    return(
-        <div className='rounded-full w-12 h-12' style={{background:`var(--color-${color})`}}></div>
-    )
-}
+const Circle = ({ color }) => {
+  return (
+    <div
+      className="rounded-full w-12 h-12"
+      style={{ background: `var(--color-${color})` }}
+    ></div>
+  );
+};
 
-const Window = () => {
-    const today = new Date();
-    const formattedDate = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+const Window = ({ todayQuestion }) => {
+  const today = new Date();
+  const formattedDate = `${today.getFullYear()}년 ${
+    today.getMonth() + 1
+  }월 ${today.getDate()}일`;
 
-    const todayQuestion = "프로세스와 스레드의 차이를 설명하세요.";
 
   return (
     <div className="w-640 h-360 bg-white rounded-lg shadow-[0px_0px_15px_0px_rgba(29,78,214,0.15)] mb-50">
@@ -38,6 +42,6 @@ const Window = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Window
+export default Window;
