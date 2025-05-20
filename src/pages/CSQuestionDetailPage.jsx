@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import BigButton from "../components/global/BigButton";
 import { fetchQuestionById } from "../api/CSQuestionApi";
+import Tab from "../components/global/Tab";
 
 function AnswerTab({ to, label, active = false }) {
   return (
@@ -63,14 +64,15 @@ const CSQuestionDetailPage = () => {
   return (
     <div className="px-120">
       {/* tab */}
-      <nav className="mt-24">
+      <Tab questionId={questionId}/>
+      {/* <nav className="mt-24">
         <AnswerTab
           to={`/questions/detail/${questionId}`}
           label={`${questionId}번`}
           active
         />
         <AnswerTab to="#" label="내 답변" />
-      </nav>
+      </nav> */}
 
       {/* 문제 */}
       {question && <p className="text-2xl py-36 border-b-1 border-gray-300 mb-36">{question.content}</p>}
