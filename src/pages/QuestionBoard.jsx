@@ -93,7 +93,7 @@ function QuestionBoard() {
       </form>
 
       <div className="grid grid-cols-12 gap-4 border-b border-gray-300 pb-2 text-black font-semibold select-none bg-[#C6E3FE]">
-        <div className="col-span-1 text-center whitespace-nowrap">번호</div>
+        <div className="col-span-1 text-center whitespace-nowrap">문제 번호</div>
         <div className="col-span-3 text-center">글 제목</div>
         <div className="col-span-2 text-center">주제</div>
         <div className="col-span-2 text-center">작성자</div>
