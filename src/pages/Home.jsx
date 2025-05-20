@@ -7,6 +7,7 @@ import axios from "axios";
 
 const Home = () => {
   const [todayQuestion, setTodayQuestion] = useState();
+  
   const fetchTodayQuestion = async()=>{
     try{
       const res = await axios.get('/api/questions/today');
