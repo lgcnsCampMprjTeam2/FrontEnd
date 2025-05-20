@@ -13,7 +13,6 @@ const CSQuestionBoard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pageParam = parseInt(params.get("page")) || 1;
@@ -37,16 +36,14 @@ const CSQuestionBoard = () => {
     );
   };
   return (
-    <div>
+    <div className="px-120">
       {/* 카테고리 필터링 */}
-      <div>
+      <div className="flex items-center gap-12 my-24">
+        <p>카테고리</p>
         <Category value={category} onChange={(e) => handleSelectCategory(e)} />
       </div>
-
       {/* 게시판 */}
-      <div className="px-120">
-        <CSQuestionTable questions={questions} />
-      </div>
+      <CSQuestionTable questions={questions} />
 
       <Pagination
         totalPages={totalPages}
