@@ -79,17 +79,17 @@ export default function AnswerResultPage() {
     );
 }
 
-function AnswerTab({ to, label, active = false }) {
-    return (
-        <Link
-            to={to}
-            className={`inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium
-        ${active
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-500 hover:text-blue-600"
-                }`}
-        >
-            {label}
-        </Link>
-    );
-}
+// function AnswerTab({ to, label, active = false }) {
+//     return (
+//         <Link
+//             to={to}
+//             className={`inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium
+//         ${active
+//                     ? "text-blue-600 border-b-2 border-blue-600"
+//                     : "text-gray-500 hover:text-blue-600"
+//                 }`}
+//         >
+//             {label}
+//         </Link>
+//     );
+// }
