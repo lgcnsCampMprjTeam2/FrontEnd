@@ -7,9 +7,9 @@ const QuestionBoard = () => {
   const [questionInfo, setQuestionInfo] = useState(null);
 
   const [comments, setComments] = useState([
-    { text: '안녕하세요! 첫 번째 댓글입니다.', author: 'User1' },
+    { text: '좋은 하루 보내세요 :)', author: 'User3' },
     { text: '이 기능 정말 유용하네요.', author: 'User2' },
-    { text: '좋은 하루 보내세요 :)', author: 'User3' }
+    { text: '안녕하세요! 첫 번째 댓글입니다.', author: 'User1' }
   ]);
   const [input, setInput] = useState('');
 
@@ -1046,7 +1046,7 @@ const QuestionBoard = () => {
       author: '익명',
     };
 
-    setComments([...comments, newComment]);
+    setComments([newComment, ...comments]);
     setInput('');
   };
 
