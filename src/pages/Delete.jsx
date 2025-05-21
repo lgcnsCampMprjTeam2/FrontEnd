@@ -1,25 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import BigButton from '../components/global/BigButton';
 
 const Delete = () => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
+    const accessToken = localStorage.getItem("accessToken");
     try {
-      const response = await fetch('/api/user/delete', {
-        method: 'POST',
-        credentials: 'include',
-      });
+      const res = await axios.post('/api/user/delete',{},{
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
+      })
 
-      if (response.ok) {
-        alert('회원 탈퇴가 완료되었습니다.');
-        navigate('/');
-      } else {
-        alert('회원 탈퇴에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('탈퇴 중 오류:', error);
-      alert('서버 오류가 발생했습니다.');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("name");
+      localStorage.removeItem("email");
+      localStorage.removeItem("profileImgUrl");
+      localStorage.removeItem("nickname");
+      alert('회원 탈퇴가 완료되었습니다.');
+      navigate('/');
+      window.location.reload();
+      console.log(res);
+      
+    } catch (e) {
+      alert('회원 탈퇴에 실패했습니다.');
+      console.log(e);
     }
   };
 
@@ -33,19 +41,10 @@ const Delete = () => {
           정말로 탈퇴하시겠습니까?<br />
           탈퇴 시 모든 정보가 삭제됩니다.
         </p>
-        <div className="flex justify-between">
-          <button
-            onClick={handleDelete}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl w-full mr-2 transition"
-          >
-            탈퇴하기
-          </button>
-          <button
-            onClick={() => navigate('../user/info')}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-xl w-full ml-2 transition"
-          >
-            취소
-          </button>
+        <div className="flex gap-12 justify-center">
+          <BigButton text="탈퇴하기" onClick={handleDelete} fill width="140px"/>
+          <BigButton text="취소" onClick={() => navigate('/user/info')} width="140px"/>
+        
         </div>
       </div>
     </div>
