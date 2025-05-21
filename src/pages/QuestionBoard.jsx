@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../components/global/Pagination";
 import Category from "../components/global/Category";
 import BigButton from "../components/global/BigButton";
+import { fetchQuestions } from "../api/QuestionApi";
 
 const itemsPerPage = 10;
 const pageGroupSize = 10;
@@ -18,24 +19,22 @@ function QuestionBoard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const res = await fetch("/QBoardData.json");
-        const data = await res.json();
-        setQuestions(data);
-      } catch (err) {
-        console.error("질문 데이터를 가져오는데 실패했습니다:", err);
-      }
+    const loadData = async () => {
+      const posts = await fetchQuestions(category, searchTerm);
+      setQuestions(posts);
     };
 
-    fetchQuestions();
-  }, []);
+    loadData();
+  }, [searchTerm, category]);
+
 
   const filtered = questions
     .filter((q) => {
-      const matchesCategory = category === "전체" || q.category === category;
+      const qCategory = q.category?.trim(); // 공백 제거
+      const matchesCategory =
+        category === "전체" || qCategory === category;
       const matchesSearch = q.title
-        .toLowerCase()
+        ?.toLowerCase()
         .includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     })
