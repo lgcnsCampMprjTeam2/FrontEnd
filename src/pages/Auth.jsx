@@ -103,7 +103,8 @@ function SignUpForm() {
   const [nickname, setNickname] = useState("");
   const [profile_image, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-
+  const navigate = useNavigate();
+  
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -130,6 +131,7 @@ function SignUpForm() {
         },
       });
       console.log("회원가입 성공:", res.data);
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
