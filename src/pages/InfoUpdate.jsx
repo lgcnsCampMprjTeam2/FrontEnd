@@ -72,17 +72,6 @@ function InfoUpdate() {
           className="w-full p-2 mb-4 border border-gray-300 rounded bg-white"
         />
 
-        <label className="w-full block mb-2 font-semibold" htmlFor="birth">
-          생년월일
-        </label>
-        <input
-          type="text"
-          id="birth"
-          name="birth"
-          defaultValue={userInfo.birthDate || ""}
-          className="w-full p-2 mb-4 border border-gray-300 rounded bg-white"
-        />
-
         <label className="w-full block mb-2 font-semibold" htmlFor="email">
           이메일
         </label>
