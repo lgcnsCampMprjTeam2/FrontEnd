@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import '../styles/style.css';
+import Tab from "../components/global/Tab";
 
 function MyPage() {
   const [userInfo, setUserInfo] = useState(null);
@@ -30,8 +31,9 @@ function MyPage() {
   }
 
   return (
-    <div className="bg-white min-h-screen">
-      <nav className="flex space-x-8 mt-4 mb-8 px-20">
+    <div className="bg-white px-120">
+      <Tab title="마이페이지" titleTo='/user/info' from="myPage"/>
+      {/* <nav className="flex space-x-8 mt-4 mb-8 px-20">
         <div className="text-blue-600 font-semibold relative py-2">
           마이페이지
           <span className="absolute bottom-0 left-0 w-full h-2 bg-blue-600 rounded"></span>
@@ -39,7 +41,7 @@ function MyPage() {
         <Link to="/myAnswers" className="text-gray-600 hover:text-blue-600 font-medium py-2">
           내 답변
         </Link>
-      </nav>
+      </nav> */}
 
       <table className="mypage-table mx-auto border-collapse">
         <tbody>
