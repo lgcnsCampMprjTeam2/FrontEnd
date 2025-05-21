@@ -51,7 +51,7 @@ function SignInForm() {
     e.preventDefault();
     try {
       const res = await axios.post("/api/user/login", { email, password });
-      const result =res.data.result ;
+      const result = res.data.result;
       console.log("로그인 성공:", res.data);
       localStorage.setItem("accessToken", result.token);
       localStorage.setItem("email", result.email);
@@ -61,6 +61,7 @@ function SignInForm() {
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${result.token}`;
       navigate("/");
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -103,7 +104,6 @@ function SignUpForm() {
   const [profile_image, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
-
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -119,12 +119,12 @@ function SignUpForm() {
     formData.append("nickname", nickname);
     formData.append("role", "USER");
 
-    if(profile_image){
+    if (profile_image) {
       formData.append("image", profile_image);
     }
 
     try {
-      const res = await axios.post("/api/user/signup", formData,{
+      const res = await axios.post("/api/user/signup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -135,7 +135,7 @@ function SignUpForm() {
     }
   };
 
-  const handleImageChange = (e) =>{
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     setProfileImage(file);
 
@@ -150,7 +150,6 @@ function SignUpForm() {
       setPreviewUrl(null);
     }
   };
-  
 
   return (
     <form onSubmit={handleSignUp} className="space-y-20">

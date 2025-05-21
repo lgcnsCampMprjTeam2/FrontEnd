@@ -12,17 +12,22 @@ const Nav = () => {
 
   const handleLogout = async () => {
     try{
-      const res = await axios.get("/api/user/logout", {
-        headers: {
-          Authorization: `Bearer ${accessToken}}`,
-        },
-      });
+      // const res = await axios.get("/api/user/logout", {
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}}`,
+      //   },
+      // });
 
       setAccessToken(null);
       setProfileImgUrl(null);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("name");
+      localStorage.removeItem("email");
+      localStorage.removeItem("profileImgUrl");
+      localStorage.removeItem("nickname");
       navigate("/");
 
-      console.log(res.data);
+      // console.log(res.data);
     }catch(e){
       console.log(e);
     }
