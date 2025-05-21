@@ -30,14 +30,17 @@ const CSQuestionDetailPage = () => {
   const navigate = useNavigate();
 
   const postAnswer = async () => {
-    const token = localStorage.getItem("accessToken");
-    if (token == null) {
-      navigate("/");
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (accessToken == null) {
+      alert("로그인이 필요합니다.");
+      navigate("/auth");
       return;
     }
+    
     try {
       const res = await axios.post(
-        "/api/answers",
+        "/api/answer",
         {
           csquestion_id: questionId,
           csanswer_content: content,
@@ -45,7 +48,7 @@ const CSQuestionDetailPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${accessToken}`,
           },
         }
       );
@@ -64,26 +67,25 @@ const CSQuestionDetailPage = () => {
   return (
     <div className="px-120">
       {/* tab */}
-      <Tab title={`${questionId}번`} titleTo={`/questions/detail/${questionId}`} from="question"/>
-      
-      {/* <nav className="mt-24">
-        <AnswerTab
-          to={`/questions/detail/${questionId}`}
-          label={`${questionId}번`}
-          active
-        />
-        <AnswerTab to="#" label="내 답변" />
-      </nav> */}
+      <Tab
+        title={`${questionId}번`}
+        titleTo={`/questions/detail/${questionId}`}
+        from="question"
+      />
 
       {/* 문제 */}
-      {question && <p className="text-2xl py-36 border-b-1 border-gray-300 mb-36">{question.content}</p>}
+      {question && (
+        <p className="text-2xl py-36 border-b-1 border-gray-300 mb-36">
+          {question.content}
+        </p>
+      )}
 
-        {/* 작성 */}
-        <CSAnswerEditor content={content} setContent={setContent} />
+      {/* 작성 */}
+      <CSAnswerEditor content={content} setContent={setContent} />
 
-        <div className="flex justify-end py-24">
-          <BigButton text="제출" fill onClick={postAnswer} />
-        </div>
+      <div className="flex justify-end py-24">
+        <BigButton text="제출" fill onClick={postAnswer} />
+      </div>
     </div>
   );
 };
