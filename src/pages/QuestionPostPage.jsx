@@ -10,13 +10,13 @@ import BigButton from '../components/global/BigButton';
 function QuestionPostPage() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('전체');
-  const [questionId, setQuestionID] = useState('');
+  const [question_id, setQuestionID] = useState('');
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    const postData = { title, category, question_id: questionId, content };
+    const postData = { title, category, question_id, content };
 
     setIsSubmitting(true);
     try {
@@ -37,7 +37,7 @@ function QuestionPostPage() {
     }
   };
 
-  const isValid = title.trim() && content.trim() && questionId;
+  const isValid = title.trim() && content.trim() && question_id;
 
   return (
     <section className="mx-auto max-w-5xl pt-14 pb-24 px-6">
@@ -60,7 +60,7 @@ function QuestionPostPage() {
         <label className="self-center text-base font-medium">문제번호</label>
         <input
           type="text"
-          value={questionId}
+          value={question_id}
           onChange={e => setQuestionID(e.target.value)}
           placeholder="문제번호"
           className="h-35 w-150 text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
