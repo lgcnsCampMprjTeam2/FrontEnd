@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import Tab from '../components/global/Tab';
 
 
 // export default function MyQuestionsPage() {
@@ -35,6 +36,7 @@ const dummyAnswers = Array.from({ length: 50 }, (_, idx) => ({
 export default function MyAnswersPage() {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const itemsPerPage = 10;
   const totalPages   = Math.ceil(dummyAnswers.length / itemsPerPage);
@@ -43,35 +45,31 @@ export default function MyAnswersPage() {
     page * itemsPerPage
   );
 
+
+  const from = location.state?.from || "myPage";
+  const questionId = location.state?.questionId;
+  const thStyle = "font-medium py-10 text-black";
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="px-120">
       {/* ─── 상단 탭 ───────────────────────── */}
-      <nav className="flex  mb-6">
-        <Link
-          to="/myAnswers"
-          className="inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium border-b-2"
-          style={{
-            color:       'var(--color-primary)',
-            borderColor: 'var(--color-primary)',
-          }}
-        >
-          내 답변
-        </Link>
-      </nav>
+      <Tab
+        from={from}
+        title={questionId?`${questionId}번`:"마이페이지"}
+        titleTo={questionId?`/questions/detail/${questionId}`:"/user/info"}
+      />
 
       {/* ─── 테이블 ───────────────────────── */}
       <div className="overflow-x-auto py-40">
-        <table className="min-w-full table-auto border-collapse">
+        <table className="w-full table-auto border-collapse">
           <thead
-            className="text-gray-700 text-sm"
-            style={{ backgroundColor: 'var(--color-secondary)' }}
+            className="text-gray-700 text-sm bg-secondary "
           >
-            <tr>
-              <th className="px-4 py-3 text-center">번호</th>
-              <th className="px-4 py-3 text-center">문제</th>
-              <th className="px-4 py-3 text-center">작성자</th>
-              <th className="px-4 py-3 text-center">작성일</th>
-              <th className="px-4 py-3 text-center">조회수</th>
+            <tr className='rounded-[5px] text-center'>
+              <th className={`${thStyle} rounded-l-[5px]`}>번호</th>
+              <th className={`${thStyle} text-start`}>문제</th>
+              <th className={thStyle}>작성자</th>
+              <th className={thStyle}>작성일</th>
+              <th className={`${thStyle} rounded-r-[5px]`}>조회수</th>
             </tr>
           </thead>
           <tbody className="text-sm">
@@ -79,11 +77,11 @@ export default function MyAnswersPage() {
               <tr
                 key={ans.id}
                 className="cursor-pointer hover:bg-gray-100 border-b-1"
-                style={{ borderColor: 'var(--color-gray-300)' }}
-                onClick={() => navigate(`/questions/${ans.questionId}`)}
+                style={{ borderColor: "var(--color-gray-300)" }}
+                onClick={() => navigate(`/answer/${ans.questionId}`)}
               >
                 <td className="px-4 py-10 text-center">{ans.id}</td>
-                <td className="px-4 py-10 text-center">{ans.questionId}</td>
+                <td className="px-4 py-10 text-start">{ans.questionId}</td>
                 <td className="px-4 py-10 text-center">{ans.author}</td>
                 <td className="px-4 py-10 text-center">{ans.createdAt}</td>
                 <td className="px-4 py-10 text-center">{ans.views}</td>
@@ -109,7 +107,7 @@ export default function MyAnswersPage() {
             className="px-3 py-1 rounded"
             style={
               page === p
-                ? { backgroundColor: 'var(--color-primary)', color: '#fff' }
+                ? { backgroundColor: "var(--color-primary)", color: "#fff" }
                 : {}
             }
           >
