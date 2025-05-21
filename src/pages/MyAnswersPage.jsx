@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { fetchAnswers } from '../api/myAnswersApi';
-import Tab from '../components/global/Tab';<<<<<< feat/#17
+import Tab from '../components/global/Tab';
 
 export default function MyAnswersPage() {
   const [answers, setAnswers]       = useState([]);
