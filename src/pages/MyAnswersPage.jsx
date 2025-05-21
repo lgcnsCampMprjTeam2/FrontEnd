@@ -1,57 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-
-
-// export default function MyQuestionsPage() {
-//   const [answers, setAnswers] = useState([]);
-//   const [page, setPage] = useState(1);
-//   const [totalPages, setTotalPages] = useState(1);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     // 내 질문 목록 조회 (페이징)
-//     axios
-//       .get('/api/answers/mine', { params: { page } })
-//       .then((res) => {
-//         setAnswers(res.data.items);
-//         setTotalPages(res.data.totalPages);
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//       });
-//   }, [page]);
-
-
-//  더미 데이터 
-const dummyAnswers = Array.from({ length: 50 }, (_, idx) => ({
-  id: 50 - idx,                     // 답변 번호
-  questionId: 123456,               // 문제 식별자 (모두 동일한 값, UI 확인용)
-  author: '작성자',                  // 작성자
-  createdAt: '2025-05-16',          // 작성일
-  views: '0' // 조회수 
-}));
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { fetchAnswers } from '../api/myAnswersApi';
 
 export default function MyAnswersPage() {
-  const [page, setPage] = useState(1);
-  const navigate = useNavigate();
+  const [answers, setAnswers]       = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage]             = useState(1);
+  const navigate                    = useNavigate();
+  const location                    = useLocation();
 
-  const itemsPerPage = 10;
-  const totalPages   = Math.ceil(dummyAnswers.length / itemsPerPage);
-  const pagedAnswers = dummyAnswers.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
+  const PAGE_SIZE = 10;
+
+  useEffect(() => {
+    const params          = new URLSearchParams(location.search);
+    const pageParam       = parseInt(params.get("page"), 10) || 1;
+    const questionIdParam = params.get("questionId");
+
+    setPage(pageParam);
+
+    fetchAnswers(pageParam, questionIdParam)
+      .then(({ content, totalPages }) => {
+        const sorted = [...content].sort((a, b) =>
+          new Date(a.csanswer_created_at) - new Date(b.csanswer_created_at)
+        );
+        setAnswers(sorted);
+        setTotalPages(totalPages);
+      })
+      .catch(console.error);
+  }, [location.search]);
+
+  const offset = (page - 1) * PAGE_SIZE;
 
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* ─── 상단 탭 ───────────────────────── */}
-      <nav className="flex  mb-6">
+      <nav className="flex mb-6">
         <Link
           to="/myAnswers"
           className="inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium border-b-2"
           style={{
-            color:       'var(--color-primary)',
+            color: 'var(--color-primary)',
             borderColor: 'var(--color-primary)',
           }}
         >
@@ -60,7 +48,7 @@ export default function MyAnswersPage() {
       </nav>
 
       {/* ─── 테이블 ───────────────────────── */}
-      <div className="overflow-x-auto py-40">
+      <div className="overflow-x-auto">
         <table className="min-w-full table-auto border-collapse">
           <thead
             className="text-gray-700 text-sm"
@@ -71,22 +59,34 @@ export default function MyAnswersPage() {
               <th className="px-4 py-3 text-center">문제</th>
               <th className="px-4 py-3 text-center">작성자</th>
               <th className="px-4 py-3 text-center">작성일</th>
-              <th className="px-4 py-3 text-center">조회수</th>
             </tr>
           </thead>
           <tbody className="text-sm">
-            {pagedAnswers.map((ans) => (
+            {answers.map((a, idx) => (
               <tr
-                key={ans.id}
-                className="cursor-pointer hover:bg-gray-100 border-b-1"
-                style={{ borderColor: 'var(--color-gray-300)' }}
-                onClick={() => navigate(`/questions/${ans.questionId}`)}
+                key={a.csanswer_id}
+                className="cursor-pointer hover:bg-gray-100 border-b border-gray-300"
+                onClick={() =>
+                  navigate(`/questions/detail/${a.csquestion_id}`)
+                }
               >
-                <td className="px-4 py-10 text-center">{ans.id}</td>
-                <td className="px-4 py-10 text-center">{ans.questionId}</td>
-                <td className="px-4 py-10 text-center">{ans.author}</td>
-                <td className="px-4 py-10 text-center">{ans.createdAt}</td>
-                <td className="px-4 py-10 text-center">{ans.views}</td>
+
+                <td className="px-4 py-6 text-center">
+                  {offset + idx + 1}
+                </td>
+                {/* 문제 제목 */}
+                <td className="px-2 py-6 text-center">
+                  {a.csquestion_content}
+                </td>
+                {/* 작성자 */}
+                <td className="px-4 py-6 text-center">
+                  {a.user_nickname}
+                </td>
+                {/*작성일(YYYY-MM-DD) */}
+                <td className="px-4 py-6 text-center">
+                  {a.csanswer_created_at.slice(0, 10)}
+                </td>
+
               </tr>
             ))}
           </tbody>
