@@ -7,7 +7,6 @@ import '../App.css';
 import { postQuestion } from "../api/QuestionPostAPI";
 import BigButton from '../components/global/BigButton';
 
-
 function QuestionPostPage() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('전체');
@@ -50,7 +49,7 @@ function QuestionPostPage() {
           value={title}
           onChange={e => setTitle(e.target.value)}
           placeholder="제목"
-          className="h-30 w-full text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className="h-35 w-full text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
         />
 
         {/* 카테고리 */}
@@ -64,7 +63,7 @@ function QuestionPostPage() {
           value={questionId}
           onChange={e => setQuestionID(e.target.value)}
           placeholder="문제번호"
-          className="h-30 w-150 text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className="h-35 w-150 text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
         />
       </div>
 
