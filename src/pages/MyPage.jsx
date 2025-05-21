@@ -48,20 +48,12 @@ function MyPage() {
             <td className="border px-4 py-2">{userInfo.name}</td>
           </tr>
           <tr>
-            <td className="border px-4 py-2">생년월일</td>
-            <td className="border px-4 py-2">{userInfo.birthDate}</td>
-          </tr>
-          <tr>
             <td className="border px-4 py-2">이메일</td>
             <td className="border px-4 py-2">{userInfo.email}</td>
           </tr>
           <tr>
             <td className="border px-4 py-2">닉네임</td>
             <td className="border px-4 py-2">{userInfo.nickname}</td>
-          </tr>
-          <tr>
-            <td className="border px-4 py-2">내 답변 수</td>
-            <td className="border px-4 py-2">{userInfo.answerCount}</td>
           </tr>
         </tbody>
       </table>
