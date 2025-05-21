@@ -5,35 +5,26 @@ import Tab from "../components/global/Tab";
 
 function MyPage() {
   const [userInfo, setUserInfo] = useState(null);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch('/UserInfoData.json');
-        if (!response.ok) {
-          throw new Error('유저 정보를 불러올 수 없습니다.');
-        }
-        const data = await response.json();
-        setUserInfo(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    fetchUserInfo();
+    const name = localStorage.getItem("name");
+    const email = localStorage.getItem("email");
+    const nickname = localStorage.getItem("nickname");
+
+    if (name && email && nickname) {
+      setUserInfo({ name, email, nickname });
+    } else {
+      setUserInfo(null);
+    }
   }, []);
 
-  if (error) {
-    return <p className="text-center mt-10 text-red-500">{error}</p>;
-  }
   if (!userInfo) {
-    return <p className="text-center mt-10">유저 정보를 찾을 수 없습니다.</p>;
+    return <p className="text-center mt-10">유저 정보를 찾을 수 없습니다. 로그인 후 이용해주세요.</p>;
   }
 
   return (
     <div className="bg-white px-120">
       <Tab title="마이페이지" titleTo='/user/info' from="myPage"/>
-
 
       <table className="mypage-table mx-auto border-collapse">
         <tbody>
