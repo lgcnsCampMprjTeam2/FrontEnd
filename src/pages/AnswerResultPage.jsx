@@ -66,45 +66,5 @@
 //         </button>
 //       </div>
 
-//       {/* ─── 수정 / 삭제 ───────────────────────── */}
-//       <div className="flex space-x-2">
-//         <button
-//           onClick={async () => {
-//             await AnswerResultapi.post(`/answers/${answerId}/edit`, {
-//               csanswer_content,
-//             });
-//             navigate(`/questions/detail/${csquestion_id}`);
-//           }}
-//           className="px-5 py-2 border rounded-[10px] hover:bg-gray-50"
-//         >
-//           수정
-//         </button>
-//         <button
-//           onClick={async () => {
-//             await AnswerResultapi.post(`/answers/${answerId}/delete`);
-//             alert('답변이 삭제되었습니다.');
-//             navigate(`/questions/detail/${csquestion_id}`);
-//           }}
-//           className="px-5 py-2 border rounded-[10px] hover:bg-gray-50"
-//         >
-//           삭제
-//         </button>
-//       </div>
-//     </section>
-//   );
-// }
 
-// function AnswerTab({ to, label, active = false }) {
-//   return (
-//     <Link
-//       to={to}
-//       className={`inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium ${
-//         active
-//           ? 'text-blue-600 border-b-2 border-blue-600'
-//           : 'text-gray-500 hover:text-blue-600'
-//       }`}
-//     >
-//       {label}
-//     </Link>
-//   );
 // }
