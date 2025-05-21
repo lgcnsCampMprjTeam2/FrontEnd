@@ -7,7 +7,6 @@ import '../App.css';
 import { postQuestion } from "../api/QuestionPostAPI";
 import BigButton from '../components/global/BigButton';
 
-
 function QuestionPostPage() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('전체');
