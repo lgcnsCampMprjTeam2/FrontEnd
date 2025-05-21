@@ -1,12 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import BigButton from "./BigButton";
 import logo from "./logo.png";
 import axios from "axios";
 
 const Nav = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  const profileImgUrl = localStorage.getItem("profileImgUrl");
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
+  const [profileImgUrl, setProfileImgUrl] = useState(localStorage.getItem("profileImgUrl"));
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
     try{
       const res = await axios.get("/api/user/logout", {
@@ -14,6 +17,10 @@ const Nav = () => {
           Authorization: `Bearer ${accessToken}}`,
         },
       });
+
+      setAccessToken(null);
+      setProfileImgUrl(null);
+      navigate("/");
 
       console.log(res.data);
     }catch(e){
@@ -45,11 +52,17 @@ const Nav = () => {
           <>
             <BigButton text="로그아웃" onClick={handleLogout} />
 
-              {profileImgUrl ?
-              <img src={profileImgUrl} alt="" />:
-              <button className="w-44 h-44 bg-gray-300 rounded-full"></button>
-            }
-
+            <Link to="/user/info">
+              {profileImgUrl ? (
+                <img
+                  src={profileImgUrl}
+                  alt=""
+                  className="w-44 h-44 bg-gray-300 rounded-full"
+                />
+              ) : (
+                <button className="w-44 h-44 bg-gray-300 rounded-full"></button>
+              )}
+            </Link>
           </>
         ) : (
           <>

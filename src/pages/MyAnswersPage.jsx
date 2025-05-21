@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { fetchAnswers } from '../api/myAnswersApi';
-import Tab from '../components/global/Tab';<<<<<< feat/#17
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { fetchAnswers } from "../api/myAnswersApi";
+import Tab from "../components/global/Tab";
 
 export default function MyAnswersPage() {
-  const [answers, setAnswers]       = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [page, setPage]             = useState(1);
-  const navigate                    = useNavigate();
-  const location                    = useLocation();
+  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const PAGE_SIZE = 10;
 
   useEffect(() => {
-    const params          = new URLSearchParams(location.search);
-    const pageParam       = parseInt(params.get("page"), 10) || 1;
+    const params = new URLSearchParams(location.search);
+    const pageParam = parseInt(params.get("page"), 10) || 1;
     const questionIdParam = params.get("questionId");
 
     setPage(pageParam);
 
     fetchAnswers(pageParam, questionIdParam)
       .then(({ content, totalPages }) => {
-        const sorted = [...content].sort((a, b) =>
-          new Date(a.csanswer_created_at) - new Date(b.csanswer_created_at)
+        const sorted = [...content].sort(
+          (a, b) =>
+            new Date(a.csanswer_created_at) - new Date(b.csanswer_created_at)
         );
         setAnswers(sorted);
         setTotalPages(totalPages);
@@ -32,34 +33,28 @@ export default function MyAnswersPage() {
 
   const offset = (page - 1) * PAGE_SIZE;
 
+  const from = location.state?.from || "myPage";
+  const questionId = location.state?.questionId;
+  const thStyle = "font-medium py-10 text-black";
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="px-120">
       {/* ─── 상단 탭 ───────────────────────── */}
-      <nav className="flex mb-6">
-        <Link
-          to="/myAnswers"
-          className="inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium border-b-2"
-          style={{
-            color: 'var(--color-primary)',
-            borderColor: 'var(--color-primary)',
-          }}
-        >
-          내 답변
-        </Link>
-      </nav>
+      <Tab
+        from={from}
+        title={questionId ? `${questionId}번` : "마이페이지"}
+        titleTo={questionId ? `/questions/detail/${questionId}` : "/user/info"}
+      />
 
       {/* ─── 테이블 ───────────────────────── */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse">
-          <thead
-            className="text-gray-700 text-sm"
-            style={{ backgroundColor: 'var(--color-secondary)' }}
-          >
-            <tr>
-              <th className="px-4 py-3 text-center">번호</th>
-              <th className="px-4 py-3 text-center">문제</th>
-              <th className="px-4 py-3 text-center">작성자</th>
-              <th className="px-4 py-3 text-center">작성일</th>
+      <div className="overflow-x-auto py-40">
+        <table className="w-full table-auto border-collapse">
+          <thead className="text-gray-700 text-sm bg-secondary ">
+            <tr className="rounded-[5px] text-center">
+              <th className={`${thStyle} rounded-l-[5px]`}>번호</th>
+              <th className={`${thStyle} text-start`}>문제</th>
+              <th className={thStyle}>작성자</th>
+              <th className={thStyle}>작성일</th>
+              <th className={`${thStyle} rounded-r-[5px]`}>조회수</th>
             </tr>
           </thead>
           <tbody className="text-sm">
@@ -67,27 +62,19 @@ export default function MyAnswersPage() {
               <tr
                 key={a.csanswer_id}
                 className="cursor-pointer hover:bg-gray-100 border-b border-gray-300"
-                onClick={() =>
-                  navigate(`/questions/detail/${a.csquestion_id}`)
-                }
+                onClick={() => navigate(`/questions/detail/${a.csquestion_id}`)}
               >
-
-                <td className="px-4 py-6 text-center">
-                  {offset + idx + 1}
-                </td>
+                <td className="px-4 py-6 text-center">{offset + idx + 1}</td>
                 {/* 문제 제목 */}
-                <td className="px-2 py-6 text-center">
+                <td className="px-2 py-6 text-start">
                   {a.csquestion_content}
                 </td>
                 {/* 작성자 */}
-                <td className="px-4 py-6 text-center">
-                  {a.user_nickname}
-                </td>
+                <td className="px-4 py-6 text-center">{a.user_nickname}</td>
                 {/*작성일(YYYY-MM-DD) */}
                 <td className="px-4 py-6 text-center">
                   {a.csanswer_created_at.slice(0, 10)}
                 </td>
-
               </tr>
             ))}
           </tbody>
@@ -110,7 +97,7 @@ export default function MyAnswersPage() {
             className="px-3 py-1 rounded"
             style={
               page === p
-                ? { backgroundColor: 'var(--color-primary)', color: '#fff' }
+                ? { backgroundColor: "var(--color-primary)", color: "#fff" }
                 : {}
             }
           >
