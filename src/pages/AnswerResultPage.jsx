@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import AnswerResultapi, { getAnswer } from "../api/AnswerResultAPI";
+import AnswerResultapi, { getAnswer } from "../api/AnswerResultApi";
 
 export default function AnswerResultPage() {
   const { answerId } = useParams();
