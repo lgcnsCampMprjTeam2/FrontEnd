@@ -53,7 +53,7 @@ function InfoUpdate() {
       localStorage.removeItem("nickname");
       localStorage.removeItem("profileImgUrl");
 
-      navigate("/auth");
+      navigate("/");
       window.location.reload();
     } catch (error) {
       alert("회원 정보 수정에 실패했습니다.");
