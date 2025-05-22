@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import AnswerResultapi, { getAnswer } from "../api/AnswerResultApi";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { getAnswer, requestFeedback, deleteAnswer } from '../api/AnswerResultApi';
 
 export default function AnswerResultPage() {
   const { answerId } = useParams();
@@ -10,23 +10,24 @@ export default function AnswerResultPage() {
   const location = useLocation();
 
   useEffect(() => {
-    if (result) return; // location.state가 있으면 바로 렌더
+    if (result) return;
 
     getAnswer(answerId)
-      .then((res) => {
+      .then(res => {
         if (res.data.isSuccess) {
           setResult(res.data.result);
         } else {
           alert(res.data.message);
-          // navigate(-1);
+          navigate(-1);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
-        alert("데이터 로딩 중 에러가 발생했습니다.");
-        // navigate(-1);
+        alert('데이터 로딩 중 에러가 발생했습니다.');
+        navigate(-1);
       });
   }, [answerId, result, navigate]);
+
 
   if (!result) {
     return (
@@ -42,26 +43,25 @@ export default function AnswerResultPage() {
     csquestion_category,
     csquestion_content,
     csanswer_content,
-    csanswer_feedback,
+    csanswer_feedback
   } = result;
+
 
   const handleFeedback = async () => {
     setFeedbackLoading(true);
     try {
-      const res = await AnswerResultapi.post(`/answer/${answerId}`, {
-        csanswer_id,
-      });
+      const res = await requestFeedback(answerId);
       if (res.data.isSuccess) {
-        setResult((prev) => ({
+        setResult(prev => ({
           ...prev,
-          csanswer_feedback: res.data.result.csanswer_feedback,
+          csanswer_feedback: res.data.result.csanswer_feedback
         }));
       } else {
         alert(res.data.message);
       }
     } catch (err) {
       console.error(err);
-      alert("피드백 요청 중 에러가 발생했습니다.");
+      alert('피드백 요청 중 에러가 발생했습니다.');
     } finally {
       setFeedbackLoading(false);
     }
@@ -74,28 +74,20 @@ export default function AnswerResultPage() {
         csquestion_category,
         csquestion_content,
         csanswer_id,
-        csanswer_content,
-      },
+        csanswer_content
+      }
     });
   };
 
+
   const handleDelete = async () => {
-    const accessToken = localStorage.getItem("accessToken");
     try {
-      await AnswerResultapi.post(
-        `/answer/${answerId}/delete`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      alert("답변이 삭제되었습니다.");
+      await deleteAnswer(answerId);
+      alert('답변이 삭제되었습니다.');
       navigate(`/questions/detail/${csquestion_id}`);
     } catch (err) {
       console.error(err);
-      alert("삭제 중 에러가 발생했습니다.");
+      alert('삭제 중 에러가 발생했습니다.');
     }
   };
 
@@ -111,7 +103,7 @@ export default function AnswerResultPage() {
         <Tab
           to="/myAnswers"
           label="내 답변"
-          active={location.pathname === "/myAnswers"}
+          active={location.pathname === '/myAnswers'}
         />
       </nav>
 
@@ -120,18 +112,22 @@ export default function AnswerResultPage() {
 
       {/* ─── 답변 ───────────────────────── */}
       <div className="h-72 py-180 border rounded-md flex items-center justify-center text-xl font-semibold">
-        {csanswer_content.replace(/<[^>]+>/g, "")}
+        {csanswer_content.replace(/<[^>]+>/g, '')}
       </div>
 
-      {/* ─── AI 코칭 피드백 ───────────────────────── */}
-      <div className="py-70 border rounded-md p-[10px] grid place-items-center">
-        {(!csanswer_feedback || csanswer_feedback === "아직 피드백 없음") && (
+      {/* ─── AI 피드백 받기 ───────────────────────── */}
+      <div className="py-100 border rounded-md p-[10px] grid place-items-center">
+        {csanswer_feedback && csanswer_feedback !== "아직 피드백 없음" ? (
+          <div className="whitespace-pre-wrap text-base leading-relaxed text-gray-700">
+            {csanswer_feedback}
+          </div>
+        ) : (
           <button
             onClick={handleFeedback}
             disabled={feedbackLoading}
             className="px-8 py-8 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
-            {feedbackLoading ? "요청 중..." : "AI 피드백 받기"}
+            {feedbackLoading ? '요청 중...' : 'AI 피드백 받기'}
           </button>
         )}
       </div>
@@ -159,11 +155,10 @@ function Tab({ to, label, active = false }) {
   return (
     <Link
       to={to}
-      className={`inline-block px-8 py-6 min-w-[80px] text-center text-lg font-medium ${
-        active
-          ? "text-blue-600 border-b-2 border-blue-600"
-          : "text-gray-500 hover:text-blue-600"
-      }`}
+      className={`inline-block px-8 py-6 min-w-[80px] text-center text-lg font-medium ${active
+        ? 'text-blue-600 border-b-2 border-blue-600'
+        : 'text-gray-500 hover:text-blue-600'
+        }`}
     >
       {label}
     </Link>
