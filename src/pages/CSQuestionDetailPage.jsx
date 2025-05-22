@@ -65,9 +65,9 @@ const CSQuestionDetailPage = () => {
   };
 
   const handleEditAnswer = () => {
-    editAnswer(editState.csanswer_id, content);
-    // navigate 필요
-    navigate(`/answer/${editState.csanswer_id}`);
+    editAnswer(editState.csanswer_id, content).then(()=>
+      navigate(`/answer/${editState.csanswer_id}`)
+    );
   };
 
   useEffect(() => {

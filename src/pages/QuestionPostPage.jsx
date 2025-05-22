@@ -26,29 +26,17 @@ function QuestionPostPage() {
       content,
     };
 
-    try {
-      const response = await postQuestion(postData);
-      console.log("API 응답 전체:", response);
-      const newId = response.result?.id;
+      postQuestion(postData).then((data)=>{
+        const postId = data.result.id;
+        
+        alert("질문이 성공적으로 등록되었습니다.");
+        navigate(`/comm/${postId}`);
+        setIsSubmitting(false);
+      });
 
-      if (!newId) {
-        throw new Error("API 응답에 새 질문 ID가 없습니다.");
-      }
-
-      alert("질문이 성공적으로 등록되었습니다.");
-      navigate(`/comm/${question_id}`);
-    } catch (err) {
-      if (err.response?.data) {
-        console.error("서버 응답 바디:", err.response.data);
-        alert(`등록 실패:\n${JSON.stringify(err.response.data, null, 2)}`);
-      } else {
-        console.error("클라이언트 에러:", err);
-        alert("질문 등록 중 에러가 발생했습니다.");
-      }
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+    
+
 
   const isValid = title.trim() && content.trim() && question_id;
 

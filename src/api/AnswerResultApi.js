@@ -47,7 +47,7 @@ export const editAnswer = async (answerId, content) => {
   console.log(content);
   try {
     const res = await axios.post(
-      `answer/${answerId}/edit`,
+      `/api/answer/${answerId}/edit`,
       { csanswer_content: content },
       {
         headers: {
@@ -57,7 +57,6 @@ export const editAnswer = async (answerId, content) => {
       }
     );
 
-    // navigate 필요
   } catch (e) {
     console.log(e);
   }
@@ -68,7 +67,7 @@ export const deleteAnswer = async (answerId) => {
   const accessToken = localStorage.getItem("accessToken");
   try {
     const res = await axios.post(
-      `/answer/${answerId}/delete`,
+      `/api/answer/${answerId}/delete`,{},
       {
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +75,6 @@ export const deleteAnswer = async (answerId) => {
         },
       }
     );
-    navigate(`/questions/detail/${answerId}`);
   } catch (e) {
     console.log(e);
   }
