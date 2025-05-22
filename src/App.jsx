@@ -38,6 +38,7 @@ function App() {
           />
           <Route path="/comm/post" element={<QuestionPostPage />} />
           <Route path="/answer/:answerId" element={<AnswerResultPage />} />
+          <Route path="/myAnswers" element={<MyAnswersPage />} />
           <Route path="/myAnswers/:questionId" element={<MyAnswersPage />}
         />
           <Route path="/auth" element={<Auth />} />
