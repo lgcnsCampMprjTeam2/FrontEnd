@@ -1,62 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  getQuestionDetail,
+  getComments,
+  postComment,
+  updateQuestion,
+  deleteQuestion,
+} from '../api/QuestionDetailApi';
 import '../styles/style.css';
 
 const QuestionDetail = () => {
   const { number } = useParams();
+  const navigate = useNavigate();
   const [questionInfo, setQuestionInfo] = useState(null);
-
-  const [comments, setComments] = useState([
-    // 임시 댓글 리스트
-    { text: '좋은 하루 보내세요 :)', author: 'User3' },
-    { text: '이 기능 정말 유용하네요.', author: 'User2' },
-    { text: '안녕하세요! 첫 번째 댓글입니다.', author: 'User1' }
-  ]);
+  const [comments, setComments] = useState([]);
   const [input, setInput] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState('');
+  const [editedTitle, setEditedTitle] = useState(''); // 제목 상태 추가
 
-  // 질문 정보 불러오기
   useEffect(() => {
-    const fetchQuestion = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/QDetailData.json');
-        if (!response.ok) {
-          throw new Error('질문 정보를 불러올 수 없습니다.');
-        }
-        const data = await response.json();
-        setQuestionInfo(data);
+        const question = await getQuestionDetail(number);
+        const commentList = await getComments(number);
+        const sortedComments = commentList.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+        setQuestionInfo(question);
+        setEditedContent(question.content);
+        setEditedTitle(question.title); // 제목 초기값 세팅
+        setComments(sortedComments);
       } catch (error) {
         console.error(error);
         setQuestionInfo(null);
+        setComments([]);
       }
     };
+
     if (number) {
-      fetchQuestion();
-    } else {
-      setQuestionInfo(null);
+      fetchData();
     }
   }, [number]);
 
-  // 댓글 리스트 API에서 불러오기
-  // useEffect(() => {
-  //   const fetchComments = async () => {
-  //     try {
-  //       const response = await fetch(`/api/comm/${number}/comments`);
-  //       if (!response.ok) {
-  //         throw new Error('댓글 정보를 불러올 수 없습니다.');
-  //       }
-  //       const data = await response.json();
-  //       setComments(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setComments([]);
-  //     }
-  //   };
-  //   if (number) {
-  //     fetchComments();
-  //   }
-  // }, [number]);
-
-  // 댓글 작성 핸들러
   const handleCommentSubmit = async () => {
     const trimmed = input.trim();
     if (trimmed === '') {
@@ -65,39 +51,69 @@ const QuestionDetail = () => {
     }
 
     const newComment = {
-      text: trimmed,
-      author: '익명',
+      content: trimmed,
+      username: '익명',
     };
 
-    // 임시 댓글 작성
-    setComments([newComment, ...comments]);
-    setInput('');
+    try {
+      await postComment(number, newComment);
 
-    // try {
-    //   const response = await fetch(`/api/comm/${number}/comments`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(newComment),
-    //   });
-    //   if (!response.ok) {
-    //     throw new Error('댓글 작성에 실패했습니다.');
-    //   }
-    //   const savedComment = await response.json();
-
-    //   // 새 댓글을 맨 앞에 추가
-    //   setComments([savedComment, ...comments]);
-    //   setInput('');
-    // } catch (error) {
-    //   alert(error.message);
-    // }
+      const commentList = await getComments(number);
+      const sortedComments = commentList
+        .sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+      setComments(sortedComments);
+      setInput('');
+    } catch (error) {
+      console.error(error);
+      alert('댓글 작성에 실패했습니다.');
+    }
   };
 
-  // Enter 키 핸들러
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleCommentSubmit();
+    }
+  };
+
+  const handleEdit = () => {
+    if (!isEditing) {
+      setIsEditing(true);
+    } else {
+      updateQuestion(number, {
+        title: editedTitle,
+        question_id: questionInfo.question_id,
+        content: editedContent,
+        category: questionInfo.category,
+      })
+        .then(() => {
+          setQuestionInfo({
+            ...questionInfo,
+            content: editedContent,
+            title: editedTitle,
+          });
+          setIsEditing(false);
+          alert('질문이 수정되었습니다.');
+        })
+        .catch((err) => {
+          console.error(err);
+          alert('수정에 실패했습니다.');
+        });
+    }
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteQuestion(number)
+        .then(() => {
+          alert('질문이 삭제되었습니다.');
+          navigate('/');
+        })
+        .catch((err) => {
+          console.error(err);
+          alert('삭제에 실패했습니다.');
+        });
     }
   };
 
@@ -112,31 +128,59 @@ const QuestionDetail = () => {
             <tbody>
               <tr className="border-b">
                 <td className="font-semibold">제목</td>
-                <td colSpan="3">{questionInfo[number].title}</td>
+                <td colSpan="3">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editedTitle}
+                      onChange={(e) => setEditedTitle(e.target.value)}
+                      className="w-full p-1 border rounded"
+                    />
+                  ) : (
+                    questionInfo.title
+                  )}
+                </td>
                 <td className="font-semibold">작성자</td>
-                <td>{questionInfo[number].author}</td>
+                <td>{questionInfo.username}</td>
               </tr>
               <tr className="border-b">
                 <td className="font-semibold">주제</td>
-                <td>{questionInfo[number].subject}</td>
-                <td className=" ont-semibold">문제 번호</td>
-                <td>{questionInfo[number].problemNumber}</td>
+                <td>{questionInfo.category}</td>
+                <td className="font-semibold">문제 번호</td>
+                <td>{questionInfo.question_id}</td>
                 <td className="font-semibold">작성일</td>
-                <td>{questionInfo[number].date}</td>
+                <td>{new Date(questionInfo.created_at).toLocaleDateString()}</td>
               </tr>
             </tbody>
           </table>
 
           {/* 질문 내용 */}
-          <div className="content-box border p-4 mb-6">
-            {questionInfo[number].content}
+          <div className="content-box border p-4 mb-6 whitespace-pre-line">
+            {isEditing ? (
+              <textarea
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                className="w-full h-40 p-2 border rounded"
+              />
+            ) : (
+              questionInfo.content
+            )}
           </div>
 
           {/* 액션 버튼 */}
           <div className="actions flex gap-4 mb-6">
-            <button className="text-gray-700 hover:text-red-300">🤍 공감</button>
-            <button className="text-gray-700 hover:text-blue-600">수정</button>
-            <button className="text-gray-700 hover:text-red-600">삭제</button>
+            <button
+              onClick={handleEdit}
+              className="text-gray-700 hover:text-blue-600"
+            >
+              {isEditing ? '저장' : '수정'}
+            </button>
+            <button
+              onClick={handleDelete}
+              className="text-gray-700 hover:text-red-600"
+            >
+              삭제
+            </button>
           </div>
         </>
       )}
@@ -153,24 +197,31 @@ const QuestionDetail = () => {
         />
         <button
           onClick={handleCommentSubmit}
-          className="bg-primary text-white rounded-r-md"
+          className="bg-primary text-white rounded-r-md px-4"
         >작성
         </button>
       </div>
 
       {/* 댓글 목록 */}
-      <table className="comment-table w-full text-sm border-t">
+      <table className="comment-table w-full text-sm border-t" style={{ tableLayout: 'fixed' }}>
+        <colgroup>
+          <col style={{ width: '70%' }} />
+          <col style={{ width: '15%' }} />
+          <col style={{ width: '15%' }} />
+        </colgroup>
         <thead>
           <tr className="bg-gray-100">
-            <th className="p-2 text-left">내용</th>
-            <th className="p-2 text-left">작성자</th>
+            <th className="p-2">내용</th>
+            <th className="p-2">작성자</th>
+            <th className="p-2">작성일</th>
           </tr>
         </thead>
         <tbody>
-          {comments.map((comment, index) => (
-            <tr key={index} className="border-t">
-              <td className="p-2">{comment.text}</td>
-              <td className="p-2">{comment.author}</td>
+          {comments.map((comment) => (
+            <tr key={comment.comment_id} className="border-t">
+              <td className="p-2">{comment.content}</td>
+              <td className="p-2">{comment.username}</td>
+              <td className="p-2">{new Date(comment.created_at).toLocaleString().slice(0, 12)}</td>
             </tr>
           ))}
         </tbody>
