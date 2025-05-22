@@ -10,7 +10,7 @@ export default function AnswerResultPage() {
   const location = useLocation();
 
   useEffect(() => {
-    if (result) return;    // location.state가 있으면 바로 렌더
+    if (result) return;
 
     getAnswer(answerId)
       .then(res => {

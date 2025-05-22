@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import CSAnswerEditor from "../components/cs/CSAnswerEditor";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import BigButton from "../components/global/BigButton";
 import { fetchQuestionById } from "../api/CSQuestionApi";
 import Tab from "../components/global/Tab";
+import { editAnswer } from "../api/AnswerResultApi";
 
 function AnswerTab({ to, label, active = false }) {
   return (
@@ -24,10 +25,13 @@ function AnswerTab({ to, label, active = false }) {
 }
 
 const CSQuestionDetailPage = () => {
-  const [content, setContent] = useState("");
   const [question, setQuestion] = useState();
   const { questionId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const editState = location.state;
+  const isEditMode = !!editState?.csanswer_id;
+  const [content, setContent] = useState(editState?.csanswer_content || "");
 
   const postAnswer = async () => {
     const accessToken = localStorage.getItem("accessToken");
@@ -37,7 +41,7 @@ const CSQuestionDetailPage = () => {
       navigate("/auth");
       return;
     }
-    
+
     try {
       const res = await axios.post(
         "/api/answer",
@@ -48,17 +52,22 @@ const CSQuestionDetailPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
 
-      console.log("답변 등록 성공", res.data);
       const csanswer_id = res.data.result.csanswer_id;
       navigate(`/answer/${csanswer_id}`);
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleEditAnswer = () => {
+    editAnswer(editState.csanswer_id, content);
+    // navigate 필요
+    navigate(`/answer/${editState.csanswer_id}`);
   };
 
   useEffect(() => {
@@ -85,7 +94,11 @@ const CSQuestionDetailPage = () => {
       <CSAnswerEditor content={content} setContent={setContent} />
 
       <div className="flex justify-end py-24">
-        <BigButton text="제출" fill onClick={postAnswer} />
+        {isEditMode ? (
+          <BigButton text="수정" fill onClick={handleEditAnswer} />
+        ) : (
+          <BigButton text="제출" fill onClick={postAnswer} />
+        )}
       </div>
     </div>
   );
