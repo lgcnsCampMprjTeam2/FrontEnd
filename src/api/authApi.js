@@ -1,8 +1,5 @@
 import axios from "axios";
 
-const authInstance = axios.create({
-  withCredentials: true,
-});
 
 export const postLogout = async ({ accessToken }) => {
   try {
@@ -39,7 +36,7 @@ function getCookie(name) {
 export const reissueToken = async () =>{
   const refreshToken = getCookie("refreshToken");
   try{
-    const res = await authInstance.post(
+    const res = await axios.post(
       "/api/auth/reissue",
       {},
       {

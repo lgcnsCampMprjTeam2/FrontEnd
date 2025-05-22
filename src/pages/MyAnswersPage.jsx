@@ -40,7 +40,7 @@ export default function MyAnswersPage() {
 
   // 날짜 포맷 YYYY-MM-DD
   const formatDate = (iso) => iso.slice(0, 10);
-  const thStyle = "font-medium py-4 text-black";
+  const thStyle = "font-medium py-10 text-black";
 
   return (
     <div className="px-120">
@@ -48,27 +48,22 @@ export default function MyAnswersPage() {
       <Tab
         from={from}
         title={questionId ? `${questionId}번` : "마이페이지"}
-        titleTo={
-          questionId
-            ? `/questions/detail/${questionId}`
-            : "/user/info"
-        }
+        titleTo={questionId ? `/questions/detail/${questionId}` : "/user/info"}
       />
 
       {/* ─── 내 답변 목록 ───────────────────────── */}
       <section className>
-        <h2 className="text-2xl font-semibold py-12">
+        <h2 className="text-2xl font-semibold pt-24">
           {questionId}번 문제에 대한 내 답변
         </h2>
-
-        <div className="overflow-x-auto py-10">
-          <table className="w-full table-auto border-collapse text-sm">
-            <thead className="bg-secondary text-gray-700">
-              <tr className="text-center">
-                <th className={thStyle}>번호</th>
-                <th className={`${thStyle} text-center`}>문제</th>
-                <th className={`${thStyle} text-center`}>작성자</th>
-                <th className={thStyle}>작성일</th>
+        <div className="overflow-x-auto py-40">
+          <table className="w-full table-auto border-collapse">
+            <thead className="text-gray-700 text-sm bg-secondary ">
+              <tr className="rounded-[5px] text-center">
+                <th className={`${thStyle} rounded-l-[5px]`}>번호</th>
+                <th className={`${thStyle}`}>문제</th>
+                <th className={thStyle}>작성자</th>
+                <th className={`${thStyle} rounded-r-[5px]`}>작성일</th>
               </tr>
             </thead>
             <tbody>
@@ -97,10 +92,7 @@ export default function MyAnswersPage() {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan={4}
-                    className="py-6 text-center text-gray-500"
-                  >
+                  <td colSpan={4} className="py-6 text-center text-gray-500">
                     아직 작성한 답변이 없습니다.
                   </td>
                 </tr>
