@@ -116,7 +116,7 @@ export default function AnswerResultPage() {
       </div>
 
       {/* ─── AI 피드백 받기 ───────────────────────── */}
-      <div className="py-100 border rounded-md p-[10px] space-y-4">
+      <div className="py-100 border rounded-md p-[10px] grid place-items-center">
         {csanswer_feedback && csanswer_feedback !== "아직 피드백 없음" ? (
           <div className="whitespace-pre-wrap text-base leading-relaxed text-gray-700">
             {csanswer_feedback}
