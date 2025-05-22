@@ -53,13 +53,14 @@ function SignInForm() {
       const res = await axios.post("/api/user/login", { email, password });
       const result = res.data.result;
       console.log("로그인 성공:", res.data);
-      localStorage.setItem("accessToken", result.token);
+      localStorage.setItem("accessToken", result.accesstoken);
       localStorage.setItem("email", result.email);
       localStorage.setItem("name", result.name);
       localStorage.setItem("nickname", result.nickname);
       localStorage.setItem("profileImgUrl", result.profileImgUrl);
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${result.token}`;
+      
+      axios.defaults.headers.common["Authorization"] = `Bearer ${result.accesstoken}`;
       navigate("/");
       window.location.reload();
     } catch (err) {
