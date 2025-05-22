@@ -22,6 +22,8 @@ export const postLogout = async ({ accessToken }) => {
     localStorage.removeItem("email");
     localStorage.removeItem("profileImgUrl");
     localStorage.removeItem("nickname");
+    document.cookie = "refreshToken=; path=/; max-age=0; Secure; SameSite=Strict";
+
   } catch (e) {
     console.log(e);
   }
