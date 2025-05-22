@@ -107,7 +107,7 @@ header {
   width: 90%;
   margin: 0.625rem auto;
   border: 1px solid #000;
-  height: 150px;
+  /* height: 150px; */
   display: flex;
   align-items: center;
   justify-content: center;
