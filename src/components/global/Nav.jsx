@@ -1,36 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BigButton from "./BigButton";
 import logo from "./logo.png";
 import axios from "axios";
+import { postLogout } from "../../api/authApi";
 
 const Nav = () => {
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
-  const [profileImgUrl, setProfileImgUrl] = useState(localStorage.getItem("profileImgUrl"));
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+  const [profileImgUrl, setProfileImgUrl] = useState(
+    localStorage.getItem("profileImgUrl")
+  );
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try{
-      // const res = await axios.get("/api/user/logout", {
-      //   headers: {
-      //     Authorization: `Bearer ${accessToken}}`,
-      //   },
-      // });
-
-      setAccessToken(null);
-      setProfileImgUrl(null);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("name");
-      localStorage.removeItem("email");
-      localStorage.removeItem("profileImgUrl");
-      localStorage.removeItem("nickname");
+  const handleLogout = () => {
+    postLogout({accessToken}).then(() => {
       navigate("/");
-
-      // console.log(res.data);
-    }catch(e){
-      console.log(e);
-    }
+      window.location.reload();
+    });
   };
 
   return (
@@ -55,7 +44,10 @@ const Nav = () => {
       <div className="flex gap-20 justify-end">
         {accessToken ? (
           <>
-            <BigButton text="로그아웃" onClick={handleLogout} />
+            <BigButton
+              text="로그아웃"
+              onClick={() => handleLogout(accessToken)}
+            />
 
             <Link to="/user/info">
               {profileImgUrl ? (
