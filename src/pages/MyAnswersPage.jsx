@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { fetchAnswers } from "../api/myAnswersApi";
 import Tab from "../components/global/Tab";
+import Pagination from "../components/global/Pagination";
 
 export default function MyAnswersPage() {
   const { questionId } = useParams();
@@ -20,25 +21,30 @@ export default function MyAnswersPage() {
     setPage(pageParam);
 
     fetchAnswers(pageParam, questionId)
-      .then(({ content }) => {
-        const filtered = content.filter(
-          (a) => String(a.csquestion_id) === String(questionId)
-        );
-        filtered.sort(
-          (a, b) =>
-            new Date(a.csanswer_created_at) - new Date(b.csanswer_created_at)
-        );
-        setAnswers(filtered);
-        setTotalPages(Math.max(1, Math.ceil(filtered.length / PAGE_SIZE)));
+      .then(({ content, totalPages: backendTotal }) => {
+        let listToShow = content;
+        if (from === "question") {
+          listToShow = content
+            .filter((a) => String(a.csquestion_id) === String(questionId))
+            .sort(
+              (a, b) =>
+                new Date(a.csanswer_created_at) -
+                new Date(b.csanswer_created_at)
+            );
+        }
+
+        setAnswers(listToShow);
+        setTotalPages(backendTotal);
       })
       .catch((err) => console.error("내 답변 조회 실패:", err));
-  }, [search, questionId]);
+  }, [search, questionId, from]);
 
   const goToPage = (p) => {
-    navigate(`/myAnswers/${questionId}?page=${p}`, { state });
+    const basePath =
+      from === "question" ? `/myAnswers/${questionId}` : `/myAnswers`;
+    navigate(`${basePath}?page=${p}`, { state });
   };
 
-  // 날짜 포맷 YYYY-MM-DD
   const formatDate = (iso) => iso.slice(0, 10);
   const thStyle = "font-medium py-10 text-black";
 
@@ -47,23 +53,29 @@ export default function MyAnswersPage() {
       {/* ─── 상단 탭 ───────────────────────── */}
       <Tab
         from={from}
-        title={questionId ? `${questionId}번` : "마이페이지"}
-        titleTo={questionId ? `/questions/detail/${questionId}` : "/user/info"}
+        title={from === "question" ? `${questionId}번` : "마이페이지"}
+        titleTo={
+          from === "question"
+            ? `/questions/detail/${questionId}`
+            : "/user/info"
+        }
       />
 
       {/* ─── 내 답변 목록 ───────────────────────── */}
-      <section className>
-        <h2 className="text-2xl font-semibold pt-24">
-          {questionId}번 문제에 대한 내 답변
+      <section>
+        <h2 className="text-2xl py-36 border-b-1 border-gray-300">
+        {from === "question"
+            ? `${questionId}번 문제에 대한 내 답변`
+            : "내가 작성한 모든 답변"}
         </h2>
-        <div className="overflow-x-auto py-40">
+        <div className="py-40 h-600">
           <table className="w-full table-auto border-collapse">
             <thead className="text-gray-700 text-sm bg-secondary ">
               <tr className="rounded-[5px] text-center">
-                <th className={`${thStyle} rounded-l-[5px]`}>번호</th>
-                <th className={`${thStyle}`}>문제</th>
-                <th className={thStyle}>작성자</th>
-                <th className={`${thStyle} rounded-r-[5px]`}>작성일</th>
+                <th className={`${thStyle} rounded-l-[5px] w-90`}>번호</th>
+                <th className={`${thStyle} text-start`}>문제</th>
+                <th className={`${thStyle} w-150`}>작성자</th>
+                <th className={`${thStyle} rounded-r-[5px] w-130`}>작성일</th>
               </tr>
             </thead>
             <tbody>
@@ -71,7 +83,7 @@ export default function MyAnswersPage() {
                 answers.map((a, idx) => (
                   <tr
                     key={a.csanswer_id}
-                    className="cursor-pointer hover:bg-gray-100 border-b"
+                    className="cursor-pointer hover:bg-gray-100 border-b-1 border-gray-300"
                     onClick={() =>
                       navigate(`/answer/${a.csanswer_id}`, { state })
                     }
@@ -79,7 +91,7 @@ export default function MyAnswersPage() {
                     <td className="px-4 py-10 text-center">
                       {(page - 1) * PAGE_SIZE + idx + 1}
                     </td>
-                    <td className="px-4 py-10 truncate text-center">
+                    <td className="px-4 py-10 truncate text-start">
                       {a.csquestion_content}
                     </td>
                     <td className="px-4 py-10 text-center">
@@ -102,32 +114,34 @@ export default function MyAnswersPage() {
         </div>
 
         {/* ─── 페이징 ───────────────────────── */}
-        <div className="flex justify-center items-center space-x-2 mt-4 text-sm">
-          <button
-            onClick={() => goToPage(Math.max(1, page - 1))}
-            disabled={page === 1}
-            className="px-3 py-1 rounded disabled:opacity-50"
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
-              key={p}
-              onClick={() => goToPage(p)}
-              className={`px-3 py-1 rounded ${
-                page === p ? "bg-primary text-white" : ""
-              }`}
+        <div className="flex justify-center py-36">
+          <ul className="flex items-center">
+            <p
+              onClick={() => goToPage(Math.max(1, page - 1))}
+              disabled={page === 1}
+              className="mr-32 cursor-pointer pr-16 border-r-1 border-gray-500"
             >
-              {p}
-            </button>
-          ))}
-          <button
-            onClick={() => goToPage(Math.min(totalPages, page + 1))}
-            disabled={page === totalPages}
-            className="px-3 py-1 rounded disabled:opacity-50"
-          >
-            Next
-          </button>
+              prev
+            </p>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <li
+                key={p}
+                className={`w-52 h-52 flex justify-center items-center text-center rounded-[10px] ${
+                  p === page ? "bg-primary text-white" : ""
+                }`}
+              >
+                {p}
+              </li>
+            ))}
+            <p
+              onClick={() => goToPage(Math.min(totalPages, page + 1))}
+              disabled={page === totalPages}
+              className="ml-32 cursor-pointer pl-16 border-l-1 border-gray-500"
+            >
+              next
+            </p>
+          </ul>
         </div>
       </section>
     </div>

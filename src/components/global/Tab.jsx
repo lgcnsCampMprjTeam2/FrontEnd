@@ -24,7 +24,14 @@ const Tab = ({ title, titleTo, from }) => {
   let leftTo = "";
   let stateForMyAnswers = {};
 
-  if (from === "question") {
+
+  if (from === "myPage") {
+    leftLabel = "마이페이지";
+    leftTo = "/user/info";
+    stateForMyAnswers = {
+      from: "myPage",
+    };
+  }else {
     leftLabel = title;
     leftTo = titleTo;
     stateForMyAnswers = {
@@ -33,13 +40,7 @@ const Tab = ({ title, titleTo, from }) => {
       titleTo,
       questionId: title.replace("번", ""),
     };
-  } else if (from === "myPage") {
-    leftLabel = "마이페이지";
-    leftTo = "/user/info";
-    stateForMyAnswers = {
-      from: "myPage",
-    };
-  }
+  } 
 
   const baseMyAnswersPath = stateForMyAnswers.questionId
     ? `/myAnswers/${stateForMyAnswers.questionId}`
@@ -53,18 +54,40 @@ const Tab = ({ title, titleTo, from }) => {
 
   return (
     <nav className="mt-24">
+      {from==="myAnswer"
+      ?
+      <>
       <AnswerTab
-        to={leftTo}
-        label={leftLabel}
-        active={location.pathname === leftTo}
+      to={titleTo}
+      label={title}
+      active={location.pathname.includes("/answer/")}
       />
-
+       <AnswerTab
+        to={`/myAnswers/${stateForMyAnswers.questionId}`}
+        label="내 답변"
+        state={stateForMyAnswers}
+        active={isMyAnswersActive}
+      />
+      </>
+      
+      :
+      <>
       <AnswerTab
+      to={leftTo}
+      label={leftLabel}
+      active={location.pathname === leftTo}
+      />
+       <AnswerTab
         to={myAnswersTo}
         label="내 답변"
         state={stateForMyAnswers}
         active={isMyAnswersActive}
       />
+      </>
+      
+    }
+
+     
     </nav>
   );
 };

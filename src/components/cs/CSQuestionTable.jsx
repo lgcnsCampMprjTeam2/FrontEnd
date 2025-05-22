@@ -8,14 +8,14 @@ const CSQuestionTable = ({ questions }) => {
   const thStyle = "font-medium py-10 text-black";
 
   return (
-    <div>
+    <div className="h-600">
       <table className="w-full">
         <thead>
           <tr className="bg-secondary rounded-[5px] text-center">
             <th className={`${thStyle} rounded-l-[5px] w-90`}>번호</th>
             <th className={`${thStyle} text-start`}>문제</th>
-            <th className={thStyle}>날짜</th>
-            <th className={`${thStyle} rounded-r-[5px]`}>정보</th>
+            <th className={`${thStyle} w-130`}>날짜</th>
+            <th className={`${thStyle} rounded-r-[5px] w-70`}>정보</th>
           </tr>
         </thead>
         <tbody>
@@ -31,7 +31,15 @@ const CSQuestionTable = ({ questions }) => {
                 </td>
                 <td>{q.createdAt.substring(0, 10)}</td>
                 <td className="flex justify-center items-center h-48">
-                  <p className="bg-gray-700 text-white w-48 h-28 flex justify-center items-center rounded-sm text-sm">
+                  <p
+                    className=" text-white w-48 h-28 flex justify-center items-center rounded-sm text-sm"
+                    style={{
+                      backgroundColor: `${q.submitted
+                        ? "var(--color-primary)"
+                        : "var(--color-gray-700)"
+                        }`
+                    }}
+                  >
                     {q.submitted ? "제출" : "미제출"}
                   </p>
                 </td>

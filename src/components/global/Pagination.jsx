@@ -34,7 +34,7 @@ const Pagination = ({ totalPages, page, setPage, category }) => {
   return (
     <div className="flex justify-center py-36">
       <ul className="flex items-center">
-        <p onClick={handlePrev} className="mr-16 cursor-pointer">
+        <p onClick={handlePrev} className="mr-32 cursor-pointer pr-16 border-r-1 border-gray-500">
           prev
         </p>
         {pages.map((p) => {
@@ -50,7 +50,7 @@ const Pagination = ({ totalPages, page, setPage, category }) => {
             </li>
           );
         })}
-        <p onClick={handleNext} className="ml-16 cursor-pointer">
+        <p onClick={handleNext} className="ml-32 cursor-pointer pl-16 border-l-1 border-gray-500" >
           next
         </p>
       </ul>
