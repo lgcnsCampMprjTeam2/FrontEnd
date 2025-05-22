@@ -37,7 +37,7 @@ function App() {
             element={<CSQuestionDetailPage />}
           />
           <Route path="/comm/post" element={<QuestionPostPage />} />
-          <Route path="/answer" element={<AnswerResultPage />} />
+          <Route path="/answer/:answerId" element={<AnswerResultPage />} />
           <Route path="/myAnswers" element={<MyAnswersPage />} />
           <Route path="/auth" element={<Auth />} />
         </Routes>

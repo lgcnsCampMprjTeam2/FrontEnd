@@ -22,7 +22,13 @@ AnswerResultapi.interceptors.response.use(
 
 //특정 답변 조회
 export function getAnswer(answerId) {
-  return AnswerResultapi.get(`/answers/${answerId}`);
+  const accessToken = localStorage.getItem("accessToken");
+  
+  return AnswerResultapi.get(`/answer/${answerId}`,{
+    headers:{
+      Authorization: `Bearer ${accessToken}`,
+    }
+  });
 }
 
 // AI 피드백 요청
