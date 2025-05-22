@@ -36,13 +36,13 @@ const Window = ({ todayQuestion }) => {
       </div>
 
       {/* content */}
-      <div className="py-22 flex flex-col items-center px-48 gap-52">
+      <div className="py-22 flex flex-col items-center px-48 h-318">
         <span className="text-base text-center font-semibold text-black border-b-1 border-black">
           오늘의 CS 질문
         </span>
 
         {todayQuestion && (
-          <p className="text-center text-5xl font-semibold text-primary text-shadow-[2px_2px_10px_rgb(0_0_0_/_0.15)] leading-60">
+          <p className="h-240 flex items-center text-center text-5xl font-semibold text-primary text-shadow-[2px_2px_10px_rgb(0_0_0_/_0.15)] leading-60">
             {todayQuestion.content}
           </p>
         )}
