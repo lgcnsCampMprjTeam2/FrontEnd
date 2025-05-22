@@ -4,7 +4,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Category from '../components/global/Category';
 import '../App.css';
-import { postQuestion } from "../api/QuestionPostApi";
+import { postQuestion } from "../api/QuestionPostAPI";
 import BigButton from '../components/global/BigButton';
 
 function QuestionPostPage() {
