@@ -10,8 +10,8 @@ export const fetchAnswers = async (page = 1, questionId) => {
   const accessToken = localStorage.getItem("accessToken");
   const res = await axios.get("/api/answer", {
     params: {
-      page,            // ?page=1
-      size: 10,        // 한 페이지당 10개
+      page,
+      size: 10,
       csquestion_id: questionId,
       sort: "csanswer_created_at,asc"
     },
