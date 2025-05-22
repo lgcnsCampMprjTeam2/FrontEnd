@@ -2,8 +2,9 @@ import axios from "axios";
 
 export async function fetchQuestions(category, searchTerm) {
     try {
-        const categoryPath = category === "전체" ? "" : `/${encodeURIComponent(category)}`;
-        const response = await fetch(`/api/comm${categoryPath}`);
+        // 카테고리가 "전체"인 경우 쿼리스트링 없이 요청
+        const query = category === "전체" ? "" : `?category=${encodeURIComponent(category)}`;
+        const response = await fetch(`/api/comm${query}`);
 
         const json = await response.json();
 
@@ -15,9 +16,8 @@ export async function fetchQuestions(category, searchTerm) {
             number: post.id,
             title: post.title,
             category: post.category,
-            author: post.author || "알 수 없음", // 응답 json 데이터 형식 수정 후 수정 예정
-            comments: post.comments || 0, 
-            likes: post.likes || 0,
+            author: post.username || "알 수 없음",
+            comments: post.comment_count || 0,
             date: post.created_at ? post.created_at.slice(0, 10) : "",
         }));
 
