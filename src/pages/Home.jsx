@@ -14,7 +14,7 @@ const Home = () => {
     fetchTodayQuestion().then((data)=>setTodayQuestion(data));
     fetchQuestions(1).then((data)=>setQuestions(data.content));
   },[]);
-  const c="fesfes";
+
   return (
     <div className="flex flex-col justify-center">
       {/* gradient */}
