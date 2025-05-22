@@ -106,12 +106,6 @@ header {
 .content-box {
   width: 90%;
   margin: 0.625rem auto;
-  border: 1px solid #000;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.125rem;
 }
 
 /* 공감, 수정, 삭제 버튼 */
