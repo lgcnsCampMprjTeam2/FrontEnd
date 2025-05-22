@@ -7,10 +7,9 @@ function AnswerTab({ to, label, active = false, state }) {
       to={to}
       state={state}
       className={`inline-block px-8 py-4 min-w-[80px] text-center text-lg font-medium
-        ${
-          active
-            ? "text-primary border-b-2 border-primary"
-            : "text-gray-500 hover:text-primary"
+        ${active
+          ? "text-primary border-b-2 border-primary"
+          : "text-gray-500 hover:text-primary"
         }`}
     >
       {label}
@@ -41,6 +40,17 @@ const Tab = ({ title, titleTo, from }) => {
       from: "myPage",
     };
   }
+
+  const baseMyAnswersPath = stateForMyAnswers.questionId
+    ? `/myAnswers/${stateForMyAnswers.questionId}`
+    : "/myAnswers";
+    
+  const myAnswersTo = `${baseMyAnswersPath}?page=1`;
+
+  const isMyAnswersActive = stateForMyAnswers.questionId
+    ? location.pathname === `/myAnswers/${stateForMyAnswers.questionId}`
+    : location.pathname === "/myAnswers";
+
   return (
     <nav className="mt-24">
       <AnswerTab
@@ -50,10 +60,10 @@ const Tab = ({ title, titleTo, from }) => {
       />
 
       <AnswerTab
-        to="/myAnswers"
+        to={myAnswersTo}
         label="내 답변"
         state={stateForMyAnswers}
-        active={location.pathname === "/myAnswers"}
+        active={isMyAnswersActive}
       />
     </nav>
   );
