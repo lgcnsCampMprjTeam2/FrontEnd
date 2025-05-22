@@ -22,7 +22,8 @@ function QuestionPostPage() {
     const postData = {
       title,
       category,
-      question_id, content,
+      question_id, 
+      content,
     };
 
     try {
@@ -35,7 +36,7 @@ function QuestionPostPage() {
       }
 
       alert("질문이 성공적으로 등록되었습니다.");
-      navigate(`/comm/${newId}`);
+      navigate(`/comm/${question_id}`);
     } catch (err) {
       if (err.response?.data) {
         console.error("서버 응답 바디:", err.response.data);
