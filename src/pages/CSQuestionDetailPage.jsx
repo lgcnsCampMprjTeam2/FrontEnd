@@ -54,7 +54,8 @@ const CSQuestionDetailPage = () => {
       );
 
       console.log("답변 등록 성공", res.data);
-      navigate(`/answer`);
+      const csanswer_id = res.data.result.csanswer_id;
+      navigate(`/answer/${csanswer_id}`);
     } catch (e) {
       console.log(e);
     }

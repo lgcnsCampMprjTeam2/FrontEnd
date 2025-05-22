@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
-import AnswerResultapi from '../api/AnswerResultAPI';
+import AnswerResultapi, { getAnswer } from '../api/AnswerResultAPI';
 
 export default function AnswerResultPage() {
   const { answerId } = useParams();
@@ -10,19 +10,20 @@ export default function AnswerResultPage() {
   const location = useLocation();
 
  useEffect(() => {
-    AnswerResultapi.get(`/answers/${answerId}`)
-      .then(res => {
-        if (res.data.isSuccess) {
-          setResult(res.data.result);
-        } else {
-          alert(res.data.message);
-          navigate(-1);
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert('데이터 로딩 중 에러가 발생했습니다.');
-      });
+  getAnswer(answerId).then(res=>{console.log(res)});
+    // AnswerResultapi.get(`/answers/${answerId}`)
+    //   .then(res => {
+    //     if (res.data.isSuccess) {
+    //       setResult(res.data.result);
+    //     } else {
+    //       alert(res.data.message);
+    //       navigate(-1);
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //     alert('데이터 로딩 중 에러가 발생했습니다.');
+    //   });
   }, [answerId, navigate]);
 
 
