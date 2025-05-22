@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import {
-  getAnswer,
-  requestFeedback,
-  deleteAnswer,
-} from "../api/AnswerResultApi";
+import { getAnswer, requestFeedback, deleteAnswer } from "../api/AnswerResultApi";
 
 export default function AnswerResultPage() {
   const { answerId } = useParams();
@@ -98,9 +94,10 @@ export default function AnswerResultPage() {
           active={location.pathname === `/answer/${csanswer_id}`}
         />
         <Tab
-          to="/myAnswers"
+          to={`/myAnswers/${csquestion_id}?page=1`}
           label="내 답변"
-          active={location.pathname === "/myAnswers"}
+          active={location.pathname === `/myAnswers/${csquestion_id}`}
+
         />
       </nav>
 

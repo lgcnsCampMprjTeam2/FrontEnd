@@ -29,7 +29,7 @@ function QuestionPostPage() {
       postQuestion(postData).then((data)=>{
         const postId = data.result.id;
         
-        alert("질문이 성공적으로 등록되었습니다.");
+        alert("질문이 등록되었습니다.");
         navigate(`/comm/${postId}`);
         setIsSubmitting(false);
       });
