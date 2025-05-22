@@ -4,7 +4,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Category from '../components/global/Category';
 import '../App.css';
-import { postQuestion } from "../api/QuestionPostAPI";
+import { postQuestion } from "../api/QuestionPostApi";
 import BigButton from '../components/global/BigButton';
 
 function QuestionPostPage() {
@@ -16,21 +16,33 @@ function QuestionPostPage() {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    const postData = { title, category, question_id, content };
-
     setIsSubmitting(true);
+
+
+    const postData = {
+      title,
+      category,
+      question_id, content,
+    };
+
     try {
       const response = await postQuestion(postData);
-      const newId = response.result.id;
-      alert('질문이 성공적으로 등록되었습니다.');
+      console.log("API 응답 전체:", response);
+      const newId = response.result?.id;
+
+      if (!newId) {
+        throw new Error("API 응답에 새 질문 ID가 없습니다.");
+      }
+
+      alert("질문이 성공적으로 등록되었습니다.");
       navigate(`/comm/${newId}`);
     } catch (err) {
-      if (err.response && err.response.data) {
-        console.error('서버 응답 바디:', err.response.data);
+      if (err.response?.data) {
+        console.error("서버 응답 바디:", err.response.data);
         alert(`등록 실패:\n${JSON.stringify(err.response.data, null, 2)}`);
       } else {
-        console.error(err);
-        alert('질문 등록 중 알 수 없는 에러가 발생했습니다.');
+        console.error("클라이언트 에러:", err);
+        alert("질문 등록 중 에러가 발생했습니다.");
       }
     } finally {
       setIsSubmitting(false);

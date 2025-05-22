@@ -9,23 +9,24 @@ export default function AnswerResultPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
- useEffect(() => {
-  getAnswer(answerId).then(res=>{console.log(res)});
-    // AnswerResultapi.get(`/answers/${answerId}`)
-    //   .then(res => {
-    //     if (res.data.isSuccess) {
-    //       setResult(res.data.result);
-    //     } else {
-    //       alert(res.data.message);
-    //       navigate(-1);
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.error(err);
-    //     alert('데이터 로딩 중 에러가 발생했습니다.');
-    //   });
-  }, [answerId, navigate]);
+useEffect(() => {
+  if (result) return;    // location.state가 있으면 바로 렌더
 
+  getAnswer(answerId)
+    .then(res => {
+      if (res.data.isSuccess) {
+        setResult(res.data.result);
+      } else {
+        alert(res.data.message);
+        navigate(-1);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('데이터 로딩 중 에러가 발생했습니다.');
+      navigate(-1);
+    });
+}, [answerId, result, navigate]);
 
 
   if (!result) {
@@ -49,7 +50,7 @@ export default function AnswerResultPage() {
   const handleFeedback = async () => {
     setFeedbackLoading(true);
     try {
-      const res = await AnswerResultapi.post(`/answers/${answerId}`, {
+      const res = await AnswerResultapi.post(`/answer/${answerId}`, {
         csanswer_id
       });
       if (res.data.isSuccess) {
@@ -83,7 +84,7 @@ export default function AnswerResultPage() {
 
   const handleDelete = async () => {
     try {
-      await AnswerResultapi.post(`/answers/${answerId}/delete`);
+      await AnswerResultapi.post(`/answer/${answerId}/delete`);
       alert('답변이 삭제되었습니다.');
       navigate(`/questions/detail/${csquestion_id}`);
     } catch (err) {
@@ -113,12 +114,12 @@ export default function AnswerResultPage() {
 
       {/* ─── 답변 ───────────────────────── */}
       <div className="h-72 py-180 border rounded-md flex items-center justify-center text-xl font-semibold">
-        {csanswer_content}
+        {csanswer_content.replace(/<[^>]+>/g, '')}
       </div>
 
       {/* ─── AI 코칭 피드백 ───────────────────────── */}
       <div className="py-70 border rounded-md p-[10px] grid place-items-center">
-        {!csanswer_feedback && (
+        {(!csanswer_feedback || csanswer_feedback === "아직 피드백 없음") && (
           <button
             onClick={handleFeedback}
             disabled={feedbackLoading}
