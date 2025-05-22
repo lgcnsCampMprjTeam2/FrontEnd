@@ -8,6 +8,7 @@ import {
   deleteQuestion,
 } from '../api/QuestionDetailApi';
 import '../styles/style.css';
+import BigButton from '../components/global/BigButton';
 
 const QuestionDetail = () => {
   const { number } = useParams();
@@ -120,7 +121,9 @@ const QuestionDetail = () => {
   return (
     <div className="bg-white p-6">
       {!questionInfo ? (
-        <p className="text-center text-gray-500">질문 정보를 불러올 수 없습니다.</p>
+        <p className="text-center text-gray-500">
+          질문 정보를 불러올 수 없습니다.
+        </p>
       ) : (
         <>
           {/* 질문 정보 테이블 */}
@@ -149,18 +152,20 @@ const QuestionDetail = () => {
                 <td className="font-semibold">문제 번호</td>
                 <td>{questionInfo.question_id}</td>
                 <td className="font-semibold">작성일</td>
-                <td>{new Date(questionInfo.created_at).toLocaleDateString()}</td>
+                <td>
+                  {new Date(questionInfo.created_at).toLocaleDateString()}
+                </td>
               </tr>
             </tbody>
           </table>
 
           {/* 질문 내용 */}
-          <div className="content-box border p-4 mb-6 whitespace-pre-line">
+          <div className="content-box p-12 border-gray-300 border-1 rounded-xl min-h-200">
             {isEditing ? (
               <textarea
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
-                className="w-full h-40 p-2 border rounded"
+                className="w-full h-40 border rounded"
               />
             ) : (
               questionInfo.content
@@ -168,19 +173,13 @@ const QuestionDetail = () => {
           </div>
 
           {/* 액션 버튼 */}
-          <div className="actions flex gap-4 mb-6">
-            <button
+          <div className="flex justify-end gap-8 mr-52">
+            <BigButton
+              text={isEditing ? "저장" : "수정"}
               onClick={handleEdit}
-              className="text-gray-700 hover:text-blue-600"
-            >
-              {isEditing ? '저장' : '수정'}
-            </button>
-            <button
-              onClick={handleDelete}
-              className="text-gray-700 hover:text-red-600"
-            >
-              삭제
-            </button>
+              fill
+            />
+            <BigButton text="삭제" onClick={handleDelete}/>
           </div>
         </>
       )}
@@ -198,16 +197,20 @@ const QuestionDetail = () => {
         <button
           onClick={handleCommentSubmit}
           className="bg-primary text-white rounded-r-md px-4"
-        >작성
+        >
+          작성
         </button>
       </div>
 
       {/* 댓글 목록 */}
-      <table className="comment-table w-full text-sm border-t" style={{ tableLayout: 'fixed' }}>
+      <table
+        className="comment-table w-full text-sm border-t"
+        style={{ tableLayout: "fixed" }}
+      >
         <colgroup>
-          <col style={{ width: '70%' }} />
-          <col style={{ width: '15%' }} />
-          <col style={{ width: '15%' }} />
+          <col style={{ width: "70%" }} />
+          <col style={{ width: "15%" }} />
+          <col style={{ width: "15%" }} />
         </colgroup>
         <thead>
           <tr className="bg-gray-100">
@@ -221,7 +224,9 @@ const QuestionDetail = () => {
             <tr key={comment.comment_id} className="border-t">
               <td className="p-2">{comment.content}</td>
               <td className="p-2">{comment.username}</td>
-              <td className="p-2">{new Date(comment.created_at).toLocaleString().slice(0, 12)}</td>
+              <td className="p-2">
+                {new Date(comment.created_at).toLocaleString().slice(0, 12)}
+              </td>
             </tr>
           ))}
         </tbody>
