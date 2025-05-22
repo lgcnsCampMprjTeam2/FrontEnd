@@ -27,12 +27,10 @@ function QuestionBoard() {
     loadData();
   }, [searchTerm, category]);
 
-
   const filtered = questions
     .filter((q) => {
       const qCategory = q.category?.trim(); // 공백 제거
-      const matchesCategory =
-        category === "전체" || qCategory === category;
+      const matchesCategory = category === "전체" || qCategory === category;
       const matchesSearch = q.title
         ?.toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -103,49 +101,51 @@ function QuestionBoard() {
         </div>
       </form>
 
-      <div className="grid grid-cols-12 gap-4 border-b border-gray-300 py-10 text-black font-semibold select-none bg-secondary rounded-[5px]">
-        <div className="col-span-1 text-center whitespace-nowrap">번호</div>
-        <div className="col-span-3 text-center">글 제목</div>
-        <div className="col-span-2 text-center">주제</div>
-        <div className="col-span-2 text-center">작성자</div>
-        <div className="col-span-1 text-center">댓글 수</div>
-        <div className="col-span-2 text-center">작성일</div>
-      </div>
+      <div className="h-600">
+        <div className="grid grid-cols-12 gap-4 border-b border-gray-300 py-10 text-black font-semibold select-none bg-secondary rounded-[5px]">
+          <div className="col-span-1 text-center whitespace-nowrap">번호</div>
+          <div className="col-span-4 text-start">글 제목</div>
+          <div className="col-span-2 text-center">주제</div>
+          <div className="col-span-2 text-center">작성자</div>
+          <div className="col-span-1 text-center">댓글 수</div>
+          <div className="col-span-2 text-center">작성일</div>
+        </div>
 
-      {/* 질문 목록 */}
-      <ul className="divide-y divide-gray-300">
-        {pageItems.length === 0 ? (
-          <li className="text-gray-500 p-4">검색 결과가 없습니다.</li>
-        ) : (
-          pageItems.map((problem) => (
-            <li
-              key={problem.number}
-              className="h-48 items-center grid grid-cols-12 gap-4 py-3 hover:bg-gray-50 cursor-pointer"
-            >
-              <div className="col-span-1 text-center text-gray-700 whitespace-nowrap">
-                {problem.number}
-              </div>
-              <div className="col-span-3 text-center">
-                <Link to={`./${problem.number}`} className="hover:underline">
-                  {problem.title}
-                </Link>
-              </div>
-              <div className="col-span-2 text-center text-gray-700">
-                {problem.category}
-              </div>
-              <div className="col-span-2 text-center text-gray-700">
-                {problem.author}
-              </div>
-              <div className="col-span-1 text-center text-gray-500">
-                {problem.comments}
-              </div>
-              <div className="col-span-2 text-center text-gray-500">
-                {problem.date}
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
+        {/* 질문 목록 */}
+        <ul className="divide-y divide-gray-300">
+          {pageItems.length === 0 ? (
+            <li className="text-gray-500 p-4">검색 결과가 없습니다.</li>
+          ) : (
+            pageItems.map((problem) => (
+              <li
+                key={problem.number}
+                className="h-48 items-center grid grid-cols-12 gap-4 py-3 hover:bg-gray-50 cursor-pointer"
+              >
+                <div className="col-span-1 text-center text-gray-700 whitespace-nowrap">
+                  {problem.number}
+                </div>
+                <div className="col-span-4 text-start">
+                  <Link to={`./${problem.number}`} className="hover:underline">
+                    {problem.title}
+                  </Link>
+                </div>
+                <div className="col-span-2 text-center text-gray-700">
+                  {problem.category}
+                </div>
+                <div className="col-span-2 text-center text-gray-700">
+                  {problem.author}
+                </div>
+                <div className="col-span-1 text-center text-gray-500">
+                  {problem.comments}
+                </div>
+                <div className="col-span-2 text-center text-gray-500">
+                  {problem.date}
+                </div>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
 
       <div className="flex justify-end mt-24">
         <BigButton text="글쓰기" onClick={() => navigate("/comm/post")} fill />
