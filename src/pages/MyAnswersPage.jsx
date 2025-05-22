@@ -21,24 +21,29 @@ export default function MyAnswersPage() {
 
     fetchAnswers(pageParam, questionId)
       .then(({ content, totalPages: backendTotal }) => {
-        const filtered = content.filter(
-          (a) => String(a.csquestion_id) === String(questionId)
-        );
-        filtered.sort(
-          (a, b) =>
-            new Date(a.csanswer_created_at) - new Date(b.csanswer_created_at)
-        );
-        setAnswers(filtered);
+        let listToShow = content;
+        if (from === "question") {
+          listToShow = content
+            .filter((a) => String(a.csquestion_id) === String(questionId))
+            .sort(
+              (a, b) =>
+                new Date(a.csanswer_created_at) -
+                new Date(b.csanswer_created_at)
+            );
+        }
+
+        setAnswers(listToShow);
         setTotalPages(backendTotal);
       })
       .catch((err) => console.error("내 답변 조회 실패:", err));
-  }, [search, questionId]);
+  }, [search, questionId, from]);
 
   const goToPage = (p) => {
-    navigate(`/myAnswers/${questionId}?page=${p}`, { state });
+    const basePath =
+      from === "question" ? `/myAnswers/${questionId}` : `/myAnswers`;
+    navigate(`${basePath}?page=${p}`, { state });
   };
 
-  // 날짜 포맷 YYYY-MM-DD
   const formatDate = (iso) => iso.slice(0, 10);
   const thStyle = "font-medium py-10 text-black";
 
@@ -47,21 +52,28 @@ export default function MyAnswersPage() {
       {/* ─── 상단 탭 ───────────────────────── */}
       <Tab
         from={from}
-        title={questionId ? `${questionId}번` : "마이페이지"}
-        titleTo={questionId ? `/questions/detail/${questionId}` : "/user/info"}
+        title={from === "question" ? `${questionId}번` : "마이페이지"}
+        titleTo={
+          from === "question"
+            ? `/questions/detail/${questionId}`
+            : "/user/info"
+        }
       />
 
       {/* ─── 내 답변 목록 ───────────────────────── */}
-      <section className>
+      <section>
         <h2 className="text-2xl font-semibold pt-24">
-          {questionId}번 문제에 대한 내 답변
+          {from === "question"
+            ? `${questionId}번 문제에 대한 내 답변`
+            : "내가 작성한 모든 답변"}
         </h2>
+
         <div className="overflow-x-auto py-40">
           <table className="w-full table-auto border-collapse">
             <thead className="text-gray-700 text-sm bg-secondary ">
               <tr className="rounded-[5px] text-center">
                 <th className={`${thStyle} rounded-l-[5px]`}>번호</th>
-                <th className={`${thStyle}`}>문제</th>
+                <th className={thStyle}>문제</th>
                 <th className={thStyle}>작성자</th>
                 <th className={`${thStyle} rounded-r-[5px]`}>작성일</th>
               </tr>
