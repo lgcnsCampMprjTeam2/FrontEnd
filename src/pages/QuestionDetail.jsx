@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   getQuestionDetail,
   getComments,
@@ -109,7 +111,7 @@ const QuestionDetail = () => {
       deleteQuestion(number)
         .then(() => {
           alert('질문이 삭제되었습니다.');
-          navigate('/');
+          navigate('/comm');
         })
         .catch((err) => {
           console.error(err);
@@ -160,17 +162,28 @@ const QuestionDetail = () => {
           </table>
 
           {/* 질문 내용 */}
+
           <div className="content-box p-12 border-gray-300 border-1 rounded-xl min-h-200">
             {isEditing ? (
-              <textarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="w-full h-40 border rounded"
+              <CKEditor
+                editor={ClassicEditor}
+                data={editedContent}
+                onReady={(editor) => {
+                  const editable = editor.ui.view.editable.element;
+                  editable.style.minHeight = '100px';
+                  editable.style.maxHeight = '100px';
+                  editable.style.padding = '1rem';
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setEditedContent(data);
+                }}
               />
             ) : (
-              questionInfo.content
+              <div dangerouslySetInnerHTML={{ __html: questionInfo.content }} />
             )}
           </div>
+
 
           {/* 액션 버튼 */}
           <div className="flex justify-end gap-8 mr-52">

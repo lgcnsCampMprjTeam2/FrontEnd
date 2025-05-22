@@ -21,25 +21,30 @@ export default function MyAnswersPage() {
     setPage(pageParam);
 
     fetchAnswers(pageParam, questionId)
-      .then(({ content }) => {
-        const filtered = content.filter(
-          (a) => String(a.csquestion_id) === String(questionId)
-        );
-        filtered.sort(
-          (a, b) =>
-            new Date(a.csanswer_created_at) - new Date(b.csanswer_created_at)
-        );
-        setAnswers(filtered);
-        setTotalPages(Math.max(1, Math.ceil(filtered.length / PAGE_SIZE)));
+      .then(({ content, totalPages: backendTotal }) => {
+        let listToShow = content;
+        if (from === "question") {
+          listToShow = content
+            .filter((a) => String(a.csquestion_id) === String(questionId))
+            .sort(
+              (a, b) =>
+                new Date(a.csanswer_created_at) -
+                new Date(b.csanswer_created_at)
+            );
+        }
+
+        setAnswers(listToShow);
+        setTotalPages(backendTotal);
       })
       .catch((err) => console.error("내 답변 조회 실패:", err));
-  }, [search, questionId]);
+  }, [search, questionId, from]);
 
   const goToPage = (p) => {
-    navigate(`/myAnswers/${questionId}?page=${p}`, { state });
+    const basePath =
+      from === "question" ? `/myAnswers/${questionId}` : `/myAnswers`;
+    navigate(`${basePath}?page=${p}`, { state });
   };
 
-  // 날짜 포맷 YYYY-MM-DD
   const formatDate = (iso) => iso.slice(0, 10);
   const thStyle = "font-medium py-10 text-black";
 
@@ -48,14 +53,20 @@ export default function MyAnswersPage() {
       {/* ─── 상단 탭 ───────────────────────── */}
       <Tab
         from={from}
-        title={questionId ? `${questionId}번` : "마이페이지"}
-        titleTo={questionId ? `/questions/detail/${questionId}` : "/user/info"}
+        title={from === "question" ? `${questionId}번` : "마이페이지"}
+        titleTo={
+          from === "question"
+            ? `/questions/detail/${questionId}`
+            : "/user/info"
+        }
       />
 
       {/* ─── 내 답변 목록 ───────────────────────── */}
       <section>
         <h2 className="text-2xl py-36 border-b-1 border-gray-300">
-          {questionId}번 문제에 대한 내 답변
+        {from === "question"
+            ? `${questionId}번 문제에 대한 내 답변`
+            : "내가 작성한 모든 답변"}
         </h2>
         <div className="py-40 h-600">
           <table className="w-full table-auto border-collapse">
