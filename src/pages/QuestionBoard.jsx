@@ -109,7 +109,6 @@ function QuestionBoard() {
         <div className="col-span-2 text-center">주제</div>
         <div className="col-span-2 text-center">작성자</div>
         <div className="col-span-1 text-center">댓글 수</div>
-        <div className="col-span-1 text-center">추천 수</div>
         <div className="col-span-2 text-center">작성일</div>
       </div>
 
@@ -139,9 +138,6 @@ function QuestionBoard() {
               </div>
               <div className="col-span-1 text-center text-gray-500">
                 {problem.comments}
-              </div>
-              <div className="col-span-1 text-center text-gray-500">
-                {problem.likes}
               </div>
               <div className="col-span-2 text-center text-gray-500">
                 {problem.date}
