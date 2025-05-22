@@ -1,6 +1,8 @@
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+const authInstance = axios.create({
+  withCredentials: true,
+});
 
 export const postLogout = async ({ accessToken }) => {
   try {
@@ -20,6 +22,8 @@ export const postLogout = async ({ accessToken }) => {
     localStorage.removeItem("email");
     localStorage.removeItem("profileImgUrl");
     localStorage.removeItem("nickname");
+    document.cookie = "refreshToken=; path=/; max-age=0; Secure; SameSite=Strict";
+
   } catch (e) {
     console.log(e);
   }
@@ -35,7 +39,7 @@ function getCookie(name) {
 export const reissueToken = async () =>{
   const refreshToken = getCookie("refreshToken");
   try{
-    const res = await axios.post(
+    const res = await authInstance.post(
       "/api/auth/reissue",
       {},
       {
