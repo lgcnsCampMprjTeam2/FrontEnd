@@ -1,41 +1,45 @@
 import axios from "axios";
 
-const AnswerResultapi = axios.create({
-  baseURL: "/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-AnswerResultapi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("ACCESS_TOKEN");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-AnswerResultapi.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 //특정 답변 조회
-export function getAnswer(answerId) {
+export const getAnswer = async (answerId) => {
   const accessToken = localStorage.getItem("accessToken");
-  
-  return AnswerResultapi.get(`/answer/${answerId}`,{
-    headers:{
-      Authorization: `Bearer ${accessToken}`,
-    }
-  });
-}
+
+  try {
+    const res = await axios.get(`/api/answer/${answerId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(res.data);
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+
+};
 
 // AI 피드백 요청
-export function requestFeedback(answerId, csanswer_id) {
-  // interceptor가 자동으로 Content-Type & Authorization 헤더를 붙여줍니다
-  return AnswerResultapi.post(`/answer/${answerId}`, { csanswer_id });
-}
+export const requestFeedback = async (answerId) => {
+  const accessToken = localStorage.getItem("accessToken");
+  try {
+    const res = await axios.post(
+      `/api/api/answers/${answerId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
+        },
+      }
+    );
+    console.log("requestFeedback 응답:", res.data);
+    return res;
+  } catch (e) {
+    console.error("requestFeedback 에러:", e);
+    throw e;
+  }
+};
+
 
 // 답변 수정 요청
 export const editAnswer = async (answerId, content) => {
@@ -43,7 +47,7 @@ export const editAnswer = async (answerId, content) => {
   console.log(content);
   try {
     const res = await axios.post(
-      `/api/answer/${answerId}/edit`,
+      `answer/${answerId}/edit`,
       { csanswer_content: content },
       {
         headers: {
@@ -65,7 +69,6 @@ export const deleteAnswer = async (answerId) => {
   try {
     const res = await axios.post(
       `/answer/${answerId}/delete`,
-      {},
       {
         headers: {
           "Content-Type": "application/json",
@@ -73,10 +76,17 @@ export const deleteAnswer = async (answerId) => {
         },
       }
     );
-    // Navigate 필요
+    navigate(`/questions/detail/${answerId}`);
   } catch (e) {
     console.log(e);
   }
 };
+
+const AnswerResultapi = axios.create({
+  baseURL: "/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export default AnswerResultapi;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
-import AnswerResultapi, { getAnswer } from '../api/AnswerResultAPI';
+import { getAnswer, requestFeedback, deleteAnswer } from '../api/AnswerResultApi';
 
 export default function AnswerResultPage() {
   const { answerId } = useParams();
@@ -9,24 +9,24 @@ export default function AnswerResultPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-useEffect(() => {
-  if (result) return;    // location.state가 있으면 바로 렌더
+  useEffect(() => {
+    if (result) return;    // location.state가 있으면 바로 렌더
 
-  getAnswer(answerId)
-    .then(res => {
-      if (res.data.isSuccess) {
-        setResult(res.data.result);
-      } else {
-        alert(res.data.message);
+    getAnswer(answerId)
+      .then(res => {
+        if (res.data.isSuccess) {
+          setResult(res.data.result);
+        } else {
+          alert(res.data.message);
+          navigate(-1);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('데이터 로딩 중 에러가 발생했습니다.');
         navigate(-1);
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert('데이터 로딩 중 에러가 발생했습니다.');
-      navigate(-1);
-    });
-}, [answerId, result, navigate]);
+      });
+  }, [answerId, result, navigate]);
 
 
   if (!result) {
@@ -50,9 +50,7 @@ useEffect(() => {
   const handleFeedback = async () => {
     setFeedbackLoading(true);
     try {
-      const res = await AnswerResultapi.post(`/answer/${answerId}`, {
-        csanswer_id
-      });
+      const res = await requestFeedback(answerId);
       if (res.data.isSuccess) {
         setResult(prev => ({
           ...prev,
@@ -84,7 +82,7 @@ useEffect(() => {
 
   const handleDelete = async () => {
     try {
-      await AnswerResultapi.post(`/answer/${answerId}/delete`);
+      await deleteAnswer(answerId);
       alert('답변이 삭제되었습니다.');
       navigate(`/questions/detail/${csquestion_id}`);
     } catch (err) {
@@ -117,9 +115,13 @@ useEffect(() => {
         {csanswer_content.replace(/<[^>]+>/g, '')}
       </div>
 
-      {/* ─── AI 코칭 피드백 ───────────────────────── */}
-      <div className="py-70 border rounded-md p-[10px] grid place-items-center">
-        {(!csanswer_feedback || csanswer_feedback === "아직 피드백 없음") && (
+      {/* ─── AI 피드백 받기 ───────────────────────── */}
+      <div className="py-100 border rounded-md p-[10px] space-y-4">
+        {csanswer_feedback && csanswer_feedback !== "아직 피드백 없음" ? (
+          <div className="whitespace-pre-wrap text-base leading-relaxed text-gray-700">
+            {csanswer_feedback}
+          </div>
+        ) : (
           <button
             onClick={handleFeedback}
             disabled={feedbackLoading}
@@ -154,8 +156,8 @@ function Tab({ to, label, active = false }) {
     <Link
       to={to}
       className={`inline-block px-8 py-6 min-w-[80px] text-center text-lg font-medium ${active
-          ? 'text-blue-600 border-b-2 border-blue-600'
-          : 'text-gray-500 hover:text-blue-600'
+        ? 'text-blue-600 border-b-2 border-blue-600'
+        : 'text-gray-500 hover:text-blue-600'
         }`}
     >
       {label}
