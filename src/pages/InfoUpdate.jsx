@@ -46,7 +46,6 @@ function InfoUpdate() {
         },
       });
 
-      console.log(res.data);
       alert("회원 정보가 수정되었습니다. 다시 로그인 해주세요.");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("name");

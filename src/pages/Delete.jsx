@@ -23,7 +23,6 @@ const Delete = () => {
       alert('회원 탈퇴가 완료되었습니다.');
       navigate('/');
       window.location.reload();
-      console.log(res);
       
     } catch (e) {
       alert('회원 탈퇴에 실패했습니다.');
