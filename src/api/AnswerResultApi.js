@@ -33,7 +33,8 @@ export function getAnswer(answerId) {
 
 // AI 피드백 요청
 export function requestFeedback(answerId, csanswer_id) {
-  return AnswerResultapi.post(`/answers/${answerId}`, { csanswer_id });
+  // interceptor가 자동으로 Content-Type & Authorization 헤더를 붙여줍니다
+  return AnswerResultapi.post(`/answer/${answerId}`, { csanswer_id });
 }
 
 // 답변 수정 요청
@@ -63,7 +64,7 @@ export const deleteAnswer = async (answerId) => {
   const accessToken = localStorage.getItem("accessToken");
   try {
     const res = await axios.post(
-      `/api/answer/${answerId}/delete`,
+      `/answer/${answerId}/delete`,
       {},
       {
         headers: {
