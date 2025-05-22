@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AnswerResultapi = axios.create({
   baseURL: "/api",
@@ -21,15 +22,21 @@ AnswerResultapi.interceptors.response.use(
 );
 
 //특정 답변 조회
-export function getAnswer(answerId) {
+export const getAnswer = async (answerId) => {
   const accessToken = localStorage.getItem("accessToken");
-  
-  return AnswerResultapi.get(`/answer/${answerId}`,{
-    headers:{
-      Authorization: `Bearer ${accessToken}`,
-    }
-  });
-}
+
+  try {
+    const res = await axios.get(`/api/answer/${answerId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(res.data);
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 // AI 피드백 요청
 export function requestFeedback(answerId, csanswer_id) {
@@ -40,7 +47,6 @@ export function requestFeedback(answerId, csanswer_id) {
 // 답변 수정 요청
 export const editAnswer = async (answerId, content) => {
   const accessToken = localStorage.getItem("accessToken");
-  console.log(content);
   try {
     const res = await axios.post(
       `/api/answer/${answerId}/edit`,
@@ -52,8 +58,6 @@ export const editAnswer = async (answerId, content) => {
         },
       }
     );
-
-    // navigate 필요
   } catch (e) {
     console.log(e);
   }

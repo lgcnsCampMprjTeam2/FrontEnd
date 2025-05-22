@@ -52,7 +52,7 @@ function SignInForm() {
     try {
       const res = await axios.post("/api/user/login", { email, password });
       const result = res.data.result;
-      console.log("로그인 성공:", res.data);
+
       localStorage.setItem("accessToken", result.accesstoken);
       localStorage.setItem("email", result.email);
       localStorage.setItem("name", result.name);
@@ -131,7 +131,7 @@ function SignUpForm() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("회원가입 성공:", res.data);
+
       navigate("/");
     } catch (err) {
       console.error(err);
