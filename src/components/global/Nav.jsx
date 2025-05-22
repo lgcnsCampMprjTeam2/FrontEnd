@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BigButton from "./BigButton";
-import logo from "./logo.png";
+import logo from "../../assets/logo.png";
 import axios from "axios";
 import { postLogout } from "../../api/authApi";
 
@@ -38,7 +38,7 @@ const Nav = () => {
       </ul>
 
       <Link className="flex justify-center" to="/">
-        <img src={logo} />
+        <img src={logo} className="h-90"/>
       </Link>
 
       <div className="flex gap-20 justify-end">
