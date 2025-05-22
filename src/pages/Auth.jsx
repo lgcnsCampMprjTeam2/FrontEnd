@@ -52,12 +52,15 @@ function SignInForm() {
     try {
       const res = await axios.post("/api/user/login", { email, password });
       const result = res.data.result;
+      
 
       localStorage.setItem("accessToken", result.accesstoken);
       localStorage.setItem("email", result.email);
       localStorage.setItem("name", result.name);
       localStorage.setItem("nickname", result.nickname);
       localStorage.setItem("profileImgUrl", result.profileImgUrl);
+
+      document.cookie = `refreshToken=${result.refreshtoken}; path=/; max-age=${7 * 24 * 60 * 60}; Secure; SameSite=Strict`;
 
       
       axios.defaults.headers.common["Authorization"] = `Bearer ${result.accesstoken}`;
