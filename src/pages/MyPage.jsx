@@ -33,7 +33,7 @@ function MyPage() {
     <div className="bg-white px-120">
       <Tab title="마이페이지" titleTo="/user/info" from="myPage" />
 
-      <table className="mypage-table border-collapse">
+      <table className="mypage-table w-full border-collapse">
         <tbody>
           <tr>
             <td className="border">이름</td>
