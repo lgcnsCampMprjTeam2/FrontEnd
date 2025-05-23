@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import {
   getQuestionDetail,
   getComments,
   postComment,
   updateQuestion,
   deleteQuestion,
-} from '../api/QuestionDetailApi';
-import '../styles/style.css';
-import BigButton from '../components/global/BigButton';
+} from "../api/QuestionDetailApi";
+import "../styles/style.css";
+import BigButton from "../components/global/BigButton";
 
 const QuestionDetail = () => {
   const { number } = useParams();
   const navigate = useNavigate();
   const [questionInfo, setQuestionInfo] = useState(null);
   const [comments, setComments] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState('');
-  const [editedTitle, setEditedTitle] = useState(''); // 제목 상태 추가
+  const [editedContent, setEditedContent] = useState("");
+  const [editedTitle, setEditedTitle] = useState(""); // 제목 상태 추가
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,34 +48,33 @@ const QuestionDetail = () => {
 
   const handleCommentSubmit = async () => {
     const trimmed = input.trim();
-    if (trimmed === '') {
-      alert('댓글을 입력해주세요.');
+    if (trimmed === "") {
+      alert("댓글을 입력해주세요.");
       return;
     }
 
     const newComment = {
       content: trimmed,
-      username: '익명',
+      username: "익명",
     };
 
     try {
       await postComment(number, newComment);
 
       const commentList = await getComments(number);
-      const sortedComments = commentList
-        .sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
+      const sortedComments = commentList.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
       setComments(sortedComments);
-      setInput('');
+      setInput("");
     } catch (error) {
       console.error(error);
-      alert('댓글 작성에 실패했습니다.');
+      alert("댓글 작성에 실패했습니다.");
     }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleCommentSubmit();
     }
   };
@@ -97,31 +96,31 @@ const QuestionDetail = () => {
             title: editedTitle,
           });
           setIsEditing(false);
-          alert('질문이 수정되었습니다.');
+          alert("질문이 수정되었습니다.");
         })
         .catch((err) => {
           console.error(err);
-          alert('수정에 실패했습니다.');
+          alert("수정에 실패했습니다.");
         });
     }
   };
 
   const handleDelete = () => {
-    if (window.confirm('정말 삭제하시겠습니까?')) {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
       deleteQuestion(number)
         .then(() => {
-          alert('질문이 삭제되었습니다.');
-          navigate('/comm');
+          alert("질문이 삭제되었습니다.");
+          navigate("/comm");
         })
         .catch((err) => {
           console.error(err);
-          alert('삭제에 실패했습니다.');
+          alert("삭제에 실패했습니다.");
         });
     }
   };
 
   return (
-    <div className="bg-white p-6">
+    <div className="bg-white px-120 flex flex-col justify-center items-center">
       {!questionInfo ? (
         <p className="text-center text-gray-500">
           질문 정보를 불러올 수 없습니다.
@@ -132,14 +131,14 @@ const QuestionDetail = () => {
           <table className="question-table border w-full text-sm mb-6">
             <tbody>
               <tr className="border-b">
-                <td className="font-semibold">제목</td>
+                <td className="font-semibold text-start">제목</td>
                 <td colSpan="3">
                   {isEditing ? (
                     <input
                       type="text"
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      className="w-full p-1 border rounded"
+                      className="w-full rounded focus:outline-0"
                     />
                   ) : (
                     questionInfo.title
@@ -163,42 +162,39 @@ const QuestionDetail = () => {
 
           {/* 질문 내용 */}
 
-          <div className="content-box p-12 border-gray-300 border-1 rounded-xl min-h-200">
-            {isEditing ? (
-              <CKEditor
-                editor={ClassicEditor}
-                data={editedContent}
-                onReady={(editor) => {
-                  const editable = editor.ui.view.editable.element;
-                  editable.style.minHeight = '100px';
-                  editable.style.maxHeight = '100px';
-                  editable.style.padding = '1rem';
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setEditedContent(data);
-                }}
-              />
-            ) : (
-              <div dangerouslySetInnerHTML={{ __html: questionInfo.content }} />
-            )}
-          </div>
+          {isEditing ? (
+            <div className="w-full">
 
+            
+            <CKEditor
+              editor={ClassicEditor}
+              data={editedContent}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setEditedContent(data);
+              }}
+            />
+            </div>
+          ) : (
+            <div className="w-full p-12 border-gray-300 border-1 rounded-xl min-h-200">
+              <div dangerouslySetInnerHTML={{ __html: questionInfo.content }} />
+            </div>
+          )}
 
           {/* 액션 버튼 */}
-          <div className="flex justify-end gap-8 mr-52">
+          <div className="flex justify-end gap-8 w-full py-16">
             <BigButton
               text={isEditing ? "저장" : "수정"}
               onClick={handleEdit}
               fill
             />
-            <BigButton text="삭제" onClick={handleDelete}/>
+            <BigButton text="삭제" onClick={handleDelete} />
           </div>
         </>
       )}
 
       {/* 댓글 입력 */}
-      <div className="comment-input flex mb-4">
+      <div className="comment-input flex my-16 w-full">
         <input
           type="text"
           value={input}

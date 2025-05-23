@@ -127,9 +127,10 @@ export default function MyAnswersPage() {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <li
                 key={p}
-                className={`w-52 h-52 flex justify-center items-center text-center rounded-[10px] ${
+                className={`w-52 h-52 flex justify-center items-center text-center rounded-[10px] cursor-pointer ${
                   p === page ? "bg-primary text-white" : ""
                 }`}
+                onClick={() => goToPage(p)}
               >
                 {p}
               </li>

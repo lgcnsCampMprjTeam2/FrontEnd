@@ -81,7 +81,7 @@ header {
 .question-table,
 .comment-table,
 .mypage-table {
-  width: 90%;
+  /* width: 90%; */
   margin: 1.25rem auto;
   border-collapse: collapse;
 }
@@ -104,8 +104,8 @@ header {
 
 /* 질문 내용 상자 */
 .content-box {
-  width: 90%;
-  margin: 0.625rem auto;
+  /* width: 90%; */
+  /* margin: 0.625rem auto; */
 }
 
 /* 공감, 수정, 삭제 버튼 */
@@ -126,8 +126,8 @@ header {
 
 /* 댓글 입력 박스 */
 .comment-input {
-  width: 90%;
-  margin: 1.25rem auto;
+  /* width: 90%; */
+  /* margin: 1.25rem auto; */
   display: flex;
 }
 
