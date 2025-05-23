@@ -40,8 +40,8 @@ const Pagination = ({ totalPages, page, setPage, category }) => {
         {pages.map((p) => {
           return (
             <li
-              className={`w-52 h-52 flex justify-center items-center text-center rounded-[10px] ${
-                p === page ? "bg-primary text-white" : ""
+              className={`w-52 h-52 flex justify-center items-center text-center rounded-[10px] cursor-pointer  ${
+                p === page ? "bg-primary text-white" : "hover:bg-primary/15"
               }`}
               key={p}
               onClick={() => handleClickPage(p)}
