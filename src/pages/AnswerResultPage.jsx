@@ -104,7 +104,11 @@ export default function AnswerResultPage() {
       {/* ─── 답변 ───────────────────────── */}
       <h3 className="text-lg mb-16">내 답변</h3>
       <div className="border-1 border-gray-300 rounded-lg p-12 mb-48 min-h-160">
-        {csanswer_content.replace(/<[^>]+>/g, "")}
+        {
+        csanswer_content.replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/g, " ")
+        }
+        
       </div>
 
       {/* ─── AI 피드백 받기 ───────────────────────── */}
