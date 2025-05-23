@@ -37,3 +37,35 @@ export const postComment = async (postId, comment) => {
 });
   return res.data.result;
 };
+
+// 댓글 수정
+export const editComment = async (commentId, content) => {
+  const res = await axios.patch(`/api/comm/comments/${commentId}`,{ content },{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    }
+  );
+  return res.data.result; // 수정된 댓글 정보
+};
+
+// 댓글 삭제
+export const deleteComment = async (commentId) => {
+  const res = await axios.delete(`/api/comm/${postId}/comments/${commentId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  });
+  return res.data.result;
+};
+
+// 댓글 좋아요 토글
+export const toggleLikeComment = async (commentId) => {
+  const res = await axios.post(`/api/comm/${postId}/${commentId}/like`,{},{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    }
+  );
+  return res.data.result;
+};

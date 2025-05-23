@@ -8,6 +8,9 @@ import {
   postComment,
   updateQuestion,
   deleteQuestion,
+  editComment,
+  deleteComment,
+  toggleLikeComment
 } from '../api/QuestionDetailApi';
 import '../styles/style.css';
 import BigButton from '../components/global/BigButton';
@@ -21,6 +24,8 @@ const QuestionDetail = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
   const [editedTitle, setEditedTitle] = useState(''); // 제목 상태 추가
+  const [editedCommentContent, setEditedCommentContent] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,10 +67,9 @@ const QuestionDetail = () => {
       await postComment(number, newComment);
 
       const commentList = await getComments(number);
-      const sortedComments = commentList
-        .sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
+      const sortedComments = commentList.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
       setComments(sortedComments);
       setInput('');
     } catch (error) {
@@ -117,6 +121,49 @@ const QuestionDetail = () => {
           console.error(err);
           alert('삭제에 실패했습니다.');
         });
+    }
+  };
+
+  // --- 댓글 수정, 삭제, 좋아요 버튼 핸들러 ---
+  const handleCommentEditSubmit = async (commentId) => {
+    if (editedCommentContent.trim() === '') {
+      alert('댓글 내용을 입력해주세요.');
+      return;
+    }
+
+    try {
+      await editComment(commentId, editedCommentContent);
+      const updatedComments = await getComments(number);
+      setComments(updatedComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+      setEditingCommentId(null);
+      setEditedCommentContent('');
+    } catch (error) {
+      console.error(error);
+      alert('댓글 수정에 실패했습니다.');
+    }
+  };
+
+  const handleCommentDelete = async (commentId) => {
+    if (!window.confirm("댓글을 삭제하시겠습니까?")) return;
+
+    try {
+      await deleteComment(commentId);
+      const updatedComments = await getComments(number);
+      setComments(updatedComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+    } catch (error) {
+      console.error(error);
+      alert('댓글 삭제에 실패했습니다.');
+    }
+  };
+
+  const handleCommentLike = async (commentId) => {
+    try {
+      const result = await toggleLikeComment(commentId);
+      const updatedComments = await getComments(number);
+      setComments(updatedComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+    } catch (error) {
+      console.error(error);
+      alert('좋아요 처리에 실패했습니다.');
     }
   };
 
@@ -184,7 +231,6 @@ const QuestionDetail = () => {
             )}
           </div>
 
-
           {/* 액션 버튼 */}
           <div className="flex justify-end gap-8 mr-52">
             <BigButton
@@ -192,7 +238,7 @@ const QuestionDetail = () => {
               onClick={handleEdit}
               fill
             />
-            <BigButton text="삭제" onClick={handleDelete}/>
+            <BigButton text="삭제" onClick={handleDelete} />
           </div>
         </>
       )}
@@ -217,11 +263,12 @@ const QuestionDetail = () => {
 
       {/* 댓글 목록 */}
       <table
-        className="comment-table w-full text-sm border-t"
+        className="comment-table w-full text-sm border-t border-collapse"
         style={{ tableLayout: "fixed" }}
       >
         <colgroup>
-          <col style={{ width: "70%" }} />
+          <col style={{ width: "55%" }} />
+          <col style={{ width: "15%" }} />
           <col style={{ width: "15%" }} />
           <col style={{ width: "15%" }} />
         </colgroup>
@@ -230,15 +277,70 @@ const QuestionDetail = () => {
             <th className="p-2">내용</th>
             <th className="p-2">작성자</th>
             <th className="p-2">작성일</th>
+            <th className="p-2"></th>
           </tr>
         </thead>
         <tbody>
           {comments.map((comment) => (
             <tr key={comment.comment_id} className="border-t">
-              <td className="p-2">{comment.content}</td>
-              <td className="p-2">{comment.username}</td>
               <td className="p-2">
+                {editingCommentId === comment.comment_id ? (
+                  <textarea
+                    value={editedCommentContent}
+                    onChange={(e) => setEditedCommentContent(e.target.value)}
+                    className="w-full p-1 border rounded"
+                  />
+                ) : (
+                  comment.content
+                )}
+              </td>
+              <td className="p-2 text-center">{comment.username}</td>
+              <td className="p-2 text-center">
                 {new Date(comment.created_at).toLocaleString().slice(0, 12)}
+              </td>
+              <td className="p-2 text-center">
+                <div className="space-x-6">
+                  {editingCommentId === comment.comment_id ? (
+                    <>
+                      <button
+                        className="bg-green-700 text-white px-4 py-1 rounded cursor-pointer"
+                        onClick={() => handleCommentEditSubmit(comment.comment_id)}
+                      >
+                        저장
+                      </button>
+                      <button
+                        className="border border-gray-400 px-4 py-1 rounded cursor-pointer"
+                        onClick={() => {
+                          setEditingCommentId(null);
+                          setEditedCommentContent('');
+                        }}
+                      >
+                        취소
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="bg-blue-700 text-white px-6 py-1 rounded cursor-pointer"
+                        onClick={() => {
+                          setEditingCommentId(comment.comment_id);
+                          setEditedCommentContent(comment.content);
+                        }}
+                      >수정
+                      </button>
+                      <button
+                        className="border border-blue-700 px-6 py-1 rounded cursor-pointer text-blue-700"
+                        onClick={() => handleCommentDelete(comment.comment_id)}
+                      >삭제
+                      </button>
+                      <button
+                        className="text-red-700 px-2 py-1 rounded cursor-pointer"
+                        onClick={() => handleCommentLike(comment.comment_id)}
+                      >♥
+                      </button>
+                    </>
+                  )}
+                </div>
               </td>
             </tr>
           ))}
