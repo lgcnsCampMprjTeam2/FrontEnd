@@ -154,7 +154,7 @@ const QuestionDetail = () => {
                 <td>{questionInfo.question_id}</td>
                 <td className="font-semibold">작성일</td>
                 <td>
-                  {new Date(questionInfo.created_at).toLocaleDateString()}
+                  {questionInfo.created_at.slice(0,10).replaceAll("-","/")}
                 </td>
               </tr>
             </tbody>
@@ -164,16 +164,14 @@ const QuestionDetail = () => {
 
           {isEditing ? (
             <div className="w-full">
-
-            
-            <CKEditor
-              editor={ClassicEditor}
-              data={editedContent}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                setEditedContent(data);
-              }}
-            />
+              <CKEditor
+                editor={ClassicEditor}
+                data={editedContent}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setEditedContent(data);
+                }}
+              />
             </div>
           ) : (
             <div className="w-full p-12 border-gray-300 border-1 rounded-xl min-h-200">
@@ -193,53 +191,79 @@ const QuestionDetail = () => {
         </>
       )}
 
-      {/* 댓글 입력 */}
-      <div className="comment-input flex my-16 w-full">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="댓글을 입력하세요"
-          className="border p-2 w-full rounded-l-md focus:outline-none"
-        />
-        <button
-          onClick={handleCommentSubmit}
-          className="bg-primary text-white rounded-r-md px-4"
-        >
-          작성
-        </button>
-      </div>
+      <div className="w-full ">
+        <h3 className="text-lg mb-16">댓글</h3>
+        {/* 댓글 입력 */}
+        <div className="comment-input flex my-16 w-full">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="댓글을 입력하세요"
+            className="border p-2 w-full rounded-l-md focus:outline-none"
+          />
+          <button
+            onClick={handleCommentSubmit}
+            className="bg-primary text-white rounded-r-md px-4"
+          >
+            작성
+          </button>
+        </div>
 
-      {/* 댓글 목록 */}
-      <table
-        className="comment-table w-full text-sm border-t"
-        style={{ tableLayout: "fixed" }}
-      >
-        <colgroup>
-          <col style={{ width: "70%" }} />
-          <col style={{ width: "15%" }} />
-          <col style={{ width: "15%" }} />
-        </colgroup>
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2">내용</th>
-            <th className="p-2">작성자</th>
-            <th className="p-2">작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {comments.map((comment) => (
-            <tr key={comment.comment_id} className="border-t">
-              <td className="p-2">{comment.content}</td>
-              <td className="p-2">{comment.username}</td>
-              <td className="p-2">
-                {new Date(comment.created_at).toLocaleString().slice(0, 12)}
-              </td>
+        {/* 댓글 목록 */}
+        <div className="">
+          <ul>
+            {comments.map((comment) => {
+              console.log(comment);
+              return (
+                <li
+                  key={comment.comment_id}
+                  className="border-b-1 border-gray-300 p-8"
+                >
+                  <div className="flex gap-4 items-center mb-8">
+                    <p className="text-primary font-semibold">
+                      {comment.username}
+                    </p>
+                    <span className="text-xs text-gray-500">
+                      · {comment.created_at.slice(0, 10).replaceAll('-',"/")}
+                    </span>
+                  </div>
+                  <div className="text-black">{comment.content}</div>
+                </li>
+              ); 
+            })}
+          </ul>
+        </div>
+        {/* <table
+          className="comment-table w-full text-sm border-t"
+          style={{ tableLayout: "fixed" }}
+        >
+          <colgroup>
+            <col style={{ width: "70%" }} />
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "15%" }} />
+          </colgroup>
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-2">내용</th>
+              <th className="p-2">작성자</th>
+              <th className="p-2">작성일</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {comments.map((comment) => (
+              <tr key={comment.comment_id} className="border-t">
+                <td className="p-2">{comment.content}</td>
+                <td className="p-2">{comment.username}</td>
+                <td className="p-2">
+                  {new Date(comment.created_at).toLocaleString().slice(0, 12)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table> */}
+      </div>
     </div>
   );
 };
