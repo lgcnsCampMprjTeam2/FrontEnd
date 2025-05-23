@@ -43,6 +43,7 @@ function QuestionBoard() {
 
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
+  console.log(filtered);
   const pageItems = filtered.slice(start, end);
 
   const groupStart = currentPageGroup * pageGroupSize + 1;

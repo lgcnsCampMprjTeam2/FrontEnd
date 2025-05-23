@@ -37,6 +37,8 @@ function QuestionPostPage() {
     }
     
 
+const inputStyle =
+  "w-full px-10 py-10 border-gray-300 border-1 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary";
 
   const isValid = title.trim() && content.trim() && question_id;
 
@@ -48,23 +50,26 @@ function QuestionPostPage() {
         <input
           type="text"
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="제목"
-          className="h-35 w-full text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className={inputStyle}
         />
 
         {/* 카테고리 */}
         <label className="self-center text-base font-medium">카테고리</label>
-        <Category value={category} onChange={e => setCategory(e.target.value)} />
+        <Category
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
 
         {/* 문제번호 */}
         <label className="self-center text-base font-medium">문제번호</label>
         <input
           type="text"
           value={question_id}
-          onChange={e => setQuestionID(e.target.value)}
+          onChange={(e) => setQuestionID(e.target.value)}
           placeholder="문제번호"
-          className="h-35 w-150 text-lg px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className={inputStyle}
         />
       </div>
 
@@ -78,16 +83,12 @@ function QuestionPostPage() {
 
       {/* 제출 버튼 */}
       <div className="flex justify-end mt-8">
-        <button
-          disabled={!isValid || isSubmitting}
+        <BigButton
+          text={isSubmitting ? "등록 중..." : "제출"}
+          fill
           onClick={handleSubmit}
-          className={`
-            ${!isValid ? 'opacity-50 cursor-not-allowed' : ''}
-            h-30 px-12 bg-blue-600 text-lg text-white rounded-md hover:bg-blue-700
-          `}
-        >
-          {isSubmitting ? '등록 중...' : '제출'}
-        </button>
+          disabled={!isValid || isSubmitting}
+        />
       </div>
     </section>
   );
