@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import { getAnswer, requestFeedback, deleteAnswer } from "../api/AnswerResultApi";
+import {
+  getAnswer,
+  requestFeedback,
+  deleteAnswer,
+} from "../api/AnswerResultApi";
 import Tab from "../components/global/Tab";
 import BigButton from "../components/global/BigButton";
 
@@ -86,6 +90,17 @@ export default function AnswerResultPage() {
     });
   };
 
+  const parseBold = (text) => {
+    const parts = text.split(/(\*\*.+?\*\*)/g);
+
+    return parts.map((part, idx) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return <strong key={idx}>{part.slice(2, -2)}</strong>;
+      }
+      return <span key={idx}>{part}</span>;
+    });
+  };
+  
   return (
     <section className="px-120">
       {/* ─── 탭 ───────────────────────── */}
@@ -94,7 +109,6 @@ export default function AnswerResultPage() {
         titleTo={`/questions/detail/${csquestion_id}`}
         from="myAnswer"
       />
-    
 
       {/* ─── 문제 본문 ───────────────────────── */}
       <h2 className="text-2xl py-36 border-b-1 border-gray-300 mb-36">
@@ -103,31 +117,31 @@ export default function AnswerResultPage() {
 
       {/* ─── 답변 ───────────────────────── */}
       <h3 className="text-lg mb-16">내 답변</h3>
-      <div className="border-1 border-gray-300 rounded-lg p-12 mb-48 min-h-160">
-        {
-        csanswer_content.replace(/<[^>]+>/g, "")
-        .replace(/&nbsp;/g, " ")
-        }
-        
-      </div>
+      <div
+        className="border-1 border-gray-300 rounded-lg p-12 mb-48 min-h-160"
+        dangerouslySetInnerHTML={{ __html: csanswer_content }}
+      ></div>
 
       {/* ─── AI 피드백 받기 ───────────────────────── */}
       <div className="mb-60">
         <h3 className="text-lg mb-16">AI 피드백</h3>
         {csanswer_feedback && csanswer_feedback !== "아직 피드백 없음" ? (
           <div className="whitespace-pre-wrap text-base leading-relaxed text-gray-700 border-1 border-gray-300 rounded-lg p-12 mb-24">
-            {csanswer_feedback}
+            {parseBold(csanswer_feedback)}
           </div>
         ) : (
-          <BigButton onClick={handleFeedback} fill disabled={feedbackLoading} text={feedbackLoading ? "요청 중..." : "AI 피드백 받기"}/>
-            
+          <BigButton
+            onClick={handleFeedback}
+            fill
+            disabled={feedbackLoading}
+            text={feedbackLoading ? "요청 중..." : "AI 피드백 받기"}
+          />
         )}
       </div>
 
-
       {/* ─── 수정 / 삭제 ───────────────────────── */}
       <div className="flex gap-8 justify-end mb-60">
-        <BigButton onClick={handleEdit} text="수정" fill/>
+        <BigButton onClick={handleEdit} text="수정" fill />
         <BigButton onClick={handleDelete} text="삭제" />
       </div>
     </section>
